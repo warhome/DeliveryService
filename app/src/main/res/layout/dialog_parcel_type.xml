@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/dialogParcelTypeCompanyText"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_alignParentStart="true"
+        android:text="Компания"/>
+
+    <RadioButton
+        android:id="@+id/dialogBtnIsCompany"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_toEndOf="@id/dialogParcelTypeCompanyText"/>
+    <TextView
+        android:id="@+id/dialogParcelTypePersonText"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_below="@id/dialogParcelTypeCompanyText"
+        android:layout_alignParentStart="true"
+        android:text="Частное лицо"/>
+    <RadioButton
+        android:id="@+id/dialogBtnIsPerson"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_toEndOf="@id/dialogParcelTypeCompanyText"/>
+</RelativeLayout>

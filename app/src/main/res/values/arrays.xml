@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="delivery_types" >
+        <item>Компания</item>
+        <item>Частное лицо</item>
+    </string-array>
+    <string-array name="status_types" >
+        <item>Активная</item>
+        <item>Завершённая</item>
+    </string-array>
+    <string-array name="notification_params" >
+        <item>Через SMS</item>
+        <item>Через Email</item>
+    </string-array>
+</resources>

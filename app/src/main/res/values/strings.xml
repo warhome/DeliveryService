@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Delivery Service</string>
+    <string name="action_settings">Settings</string>
+    <string name="delivery_service_name">Delivery Service</string>
+    <string name="showInMap">Показать на карте</string>
+    <string-array name="status_name_RU">
+        <item>Активные</item>
+        <item>Завершённые</item>
+        <item>Все</item>
+    </string-array>
+    <string-array name="status_name_EN">
+        <item>Active</item>
+        <item>Completed</item>
+        <item>All</item>
+    </string-array>
+    <string name="title_activity_add_parcel">AddParcel</string>
+</resources>
