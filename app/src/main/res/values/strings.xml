@@ -14,4 +14,32 @@
         <item>All</item>
     </string-array>
     <string name="title_activity_add_parcel">AddParcel</string>
+    <string name="SET_CUSTOMER_TYPE_TAG">SET_CUSTOMER_TYPE_TAG</string>
+    <string name="SET_DESTINATION_TYPE_TAG">SET_DESTINATION_TYPE_TAG</string>
+    <string name="coordinates">coordinates</string>
+    <string name="SET_PARCEL_TYPE">SET_PARCEL_TYPE</string>
+    <string name="Completed">Completed</string>
+    <string name="Enter_comment">Введите комментарий</string>
+    <string name="SAVE_PARCEL_TAG">SAVE_PARCEL_TAG</string>
+    <string name="SMS">SMS</string>
+    <string name="NOTIFICATION_DIALOG">NOTIFICATION_DIALOG</string>
+    <string name="DATE_PICKER_TAG">DATE_PICKER_TAG</string>
+    <string name="id">id</string>
+    <string name="Company">Company</string>
+    <string name="Person">Person</string>
+    <string name="Active">Active</string>
+    <string name="Email">Email</string>
+    <string name="data">data</string>
+    <string name="coordinates_delimiter">,</string>
+    <string name="date_delimiter">-</string>
+    <string name="smsto">smsto:</string>
+    <string name="sms_body">sms_body</string>
+    <string name="mailto">mailto</string>
+    <string name="EXTRA_SUBJECT_VALUE">DeliveryService</string>
+    <string name="notification_title">Доставка DeliveryService!</string>
+    <string name="key">key</string>
+    <string name="isRecyclerIntent">isRecyclerIntent</string>
+    <string name="Map">Map</string>
+    <string name="addparcel">AddParcel</string>
+    <string name="TabPosition">TabPosition</string>
 </resources>

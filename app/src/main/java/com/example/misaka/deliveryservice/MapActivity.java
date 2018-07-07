@@ -7,8 +7,10 @@ import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -27,6 +29,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     GoogleMap mMap;
     Button btn;
     String coordinates;
+    ActionBar actionBar;
 
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -37,12 +40,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        //Toolbar
+        Toolbar toolbar = findViewById(R.id.toolbarMap);
+        setSupportActionBar(toolbar);
+        actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setCustomView(R.layout.app_bar_map);
+            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        }
+
         getLocationPermission();
 
         btn = findViewById(R.id.mapBtn);
         btn.setOnClickListener(v -> {
             Intent intent = new Intent();
-            intent.putExtra("coordinates",coordinates);
+            intent.putExtra(getString(R.string.coordinates),coordinates);
             setResult(RESULT_OK,intent);
             finish();
         });
@@ -58,20 +70,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Intent intent = getIntent();
 
         // Если activity запущена из recyclerView нам не нужно обрабатывать нажатия на карту
-        if(intent.hasExtra("isRecyclerIntent")) {
+        if(intent.hasExtra(getString(R.string.isRecyclerIntent))) {
             btn.setVisibility(View.INVISIBLE);
+            if(actionBar!=null) actionBar.setDisplayHomeAsUpEnabled(true);
+
         }
         else {
             mMap.setOnMapClickListener(latLng -> {
                 mMap.clear();
                 mMap.addMarker(new MarkerOptions().position(latLng));
-                coordinates = String.valueOf(latLng.latitude) + ',' + String.valueOf(latLng.longitude);
+                coordinates = String.valueOf(latLng.latitude) + getString(R.string.coordinates_delimiter) + String.valueOf(latLng.longitude);
                 Toast.makeText(this, latLng.toString(), Toast.LENGTH_SHORT).show();
             });
         }
 
-        if(intent.hasExtra("coordinates")) {
-            String[] markerCoordinates = intent.getStringExtra("coordinates").split(",");
+        if(intent.hasExtra(getString(R.string.coordinates))) {
+            String[] markerCoordinates = intent.getStringExtra(getString(R.string.coordinates)).split(getString(R.string.coordinates_delimiter));
             LatLng latLng = new LatLng(Double.valueOf(markerCoordinates[0]), Double.valueOf(markerCoordinates[1]));
             mMap.addMarker(new MarkerOptions().position(latLng));
             moveCamera(latLng, 15f);

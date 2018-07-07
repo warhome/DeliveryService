@@ -1,317 +1,514 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/headTextCustomer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Данные заказчика:"
-            android:textSize="25sp"
-            android:paddingStart="40sp"
-            android:layout_centerHorizontal="true"
-            android:background="@color/colorAccentLite"
+            android:textSize="24sp"
+            android:layout_marginTop="18dp"
+            android:layout_marginStart="18dp"
             />
-
-        <EditText
-            android:id="@+id/customerAddressEditText"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_below="@id/headTextCustomer"
-            android:inputType="textPersonName"
-            android:hint="Адрес(*)"
-            android:textSize="16sp" />
+            android:layout_height="1dp"
+            android:background="@color/colorAccent"
+            android:layout_marginStart="18dp"
+            android:layout_below="@id/headTextCustomer"/>
 
-        <EditText
-            android:id="@+id/customerFullNameEditText"
+        <android.support.design.widget.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
+            android:id="@+id/customerAddressEditTextLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/customerAddressEditText"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:inputType="textPersonName"
-            android:hint="ФИО(*)"
-            android:textSize="16sp" />
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="18dp"
+            android:layout_below="@id/headTextCustomer">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/customerAddressEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Адрес*"
+                android:inputType="textPersonName"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/customerEmailEditText"
-            android:layout_width="match_parent"
+        <android.support.design.widget.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
+            android:id="@+id/customerFullNameEditTextLayout"
             android:layout_height="match_parent"
-            android:layout_below="@id/customerFullNameEditText"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:inputType="textEmailAddress"
-            android:hint="Email"
-            android:textSize="16sp" />
+            android:layout_width="match_parent"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="18dp"
+            android:layout_below="@id/customerAddressEditTextLayout"
+            android:textSize="16sp">
+            <EditText
+                android:id="@+id/customerFullNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/customerAddressEditTextLayout"
+                android:inputType="textPersonName"
+                android:hint="ФИО*"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/customerPhoneNumberEditText"
-            android:layout_width="match_parent"
+        <android.support.design.widget.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
+            android:id="@+id/customerEmailEditTextLayout"
             android:layout_height="match_parent"
-            android:layout_below="@id/customerEmailEditText"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:inputType="phone"
-            android:hint="Телефон(*)"
-            android:textSize="16sp" />
+            android:layout_width="match_parent"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="18dp"
+            android:layout_below="@id/customerFullNameEditTextLayout"
+            android:textSize="16sp">
+            <EditText
+                android:id="@+id/customerEmailEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/customerFullNameEditTextLayout"
+                android:inputType="textEmailAddress"
+                android:hint="Email"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
+            android:id="@+id/customerPhoneNumberEditTextLayout"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="18dp"
+            android:layout_below="@id/customerEmailEditTextLayout"
+            android:textSize="16sp">
+            <EditText
+                android:id="@+id/customerPhoneNumberEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/customerEmailEditTextLayout"
+                android:inputType="phone"
+                android:hint="Телефон*"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/buttonSetCustomerType"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="125dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/rounded_button"
+            android:textColor="@color/PrimaryLight"
             android:text="Выбрать тип"
-            android:layout_below="@id/customerPhoneNumberEditText" />
+            android:layout_below="@id/customerPhoneNumberEditTextLayout" />
 
-        <EditText
-            android:id="@+id/customerTypeEditText"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@id/customerPhoneNumberEditText"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_toEndOf="@id/buttonSetCustomerType"
-            android:inputType="textPersonName"
+        <android.support.design.widget.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
+            android:id="@+id/customerTypeEditTextLayout"
+            android:layout_width="1500dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="18dp"
+            android:layout_toEndOf="@id/buttonSetDestinationType"
+            android:layout_below="@id/customerPhoneNumberEditTextLayout"
             android:visibility="invisible"
-            android:hint="Название компании"
-            android:textSize="16sp" />
+            android:textSize="16sp">
+            <EditText
+                android:id="@+id/customerTypeEditText"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/customerPhoneNumberEditTextLayout"
+                android:layout_toEndOf="@id/buttonSetCustomerType"
+                android:inputType="textPersonName"
+                android:hint="Название компании"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
 
         <TextView
             android:id="@+id/headTextDestination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Данные адресата:"
-            android:textSize="25sp"
-            android:paddingStart="40sp"
-            android:layout_centerHorizontal="true"
-            android:background="@color/colorAccentLite"
-            android:layout_below="@id/buttonSetCustomerType"/>
-
-        <EditText
-            android:id="@+id/destinationAddressEditText"
+            android:textSize="24sp"
+            android:layout_marginTop="50dp"
+            android:layout_marginStart="18dp"
+            android:layout_below="@id/buttonSetCustomerType"
+            />
+        <View
             android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorAccent"
+            android:layout_marginStart="18dp"
+            android:layout_below="@id/headTextDestination"/>
+
+        <android.support.design.widget.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
+            android:id="@+id/destinationAddressEditTextLayout"
             android:layout_height="match_parent"
+            android:layout_width="260dp"
             android:layout_below="@id/headTextDestination"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:inputType="textPersonName"
-            android:hint="Адрес(*)"
-            android:textSize="16sp" />
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="18dp"
+            android:textSize="16sp">
+            <EditText
+                android:id="@+id/destinationAddressEditText"
+                android:layout_width="260dp"
+                android:layout_height="match_parent"
+                android:layout_below="@id/headTextDestination"
+                android:inputType="textPersonName"
+                android:hint="Адрес*"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/destinationFullNameEditText"
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/buttonSetCoordinates"
+            android:background="@drawable/google_maps"
+            android:layout_below="@id/headTextDestination"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="18dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/headCoordinates"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/destinationAddressEditText"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:inputType="textPersonName"
-            android:hint="ФИО(*)"
-            android:textSize="16sp" />
+            android:layout_marginStart="18dp"
+            android:text="Координаты"
+            android:textSize="16sp"
+            android:layout_below="@+id/destinationAddressEditTextLayout" />
 
-        <EditText
-            android:id="@+id/destinationEmailEditText"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/latText"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/destinationFullNameEditText"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:textSize="16sp" />
+            android:layout_marginStart="18dp"
+            android:text="lat:"
+            android:textSize="16sp"
+            android:layout_below="@id/headCoordinates" />
 
-        <EditText
-            android:id="@+id/destinationPhoneNumberEditText"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/lngText"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/destinationEmailEditText"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:inputType="phone"
-            android:hint="Телефон(*)"
-            android:textSize="16sp" />
+            android:layout_marginStart="18dp"
+            android:text="lng:"
+            android:textSize="16sp"
+            android:layout_below="@id/latText"
+            />
+        <TextView
+            android:id="@+id/latTextValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:textSize="16sp"
+            android:layout_below="@id/headCoordinates"
+            android:layout_toEndOf="@id/latText"/>
+
+        <TextView
+            android:id="@+id/lngTextValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:textSize="16sp"
+            android:layout_below="@id/latText"
+            android:layout_toEndOf="@id/lngText"/>
+
+
+        <android.support.design.widget.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
+            android:id="@+id/destinationFullNameEditTextLayout"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_below="@id/lngText"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="18dp"
+            android:textSize="16sp">
+            <EditText
+                android:id="@+id/destinationFullNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/lngText"
+                android:inputType="textPersonName"
+                android:hint="ФИО*"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
+            android:id="@+id/destinationEmailEditTextLayout"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_below="@id/destinationFullNameEditTextLayout"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="18dp"
+            android:textSize="16sp">
+            <EditText
+                android:id="@+id/destinationEmailEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/destinationFullNameEditTextLayout"
+                android:inputType="textEmailAddress"
+                android:hint="Email"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
+            android:id="@+id/destinationPhoneNumberEditTextLayout"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_below="@id/destinationEmailEditTextLayout"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="18dp"
+            android:textSize="16sp">
+            <EditText
+                android:id="@+id/destinationPhoneNumberEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/destinationEmailEditTextLayout"
+                android:inputType="phone"
+                android:hint="Телефон*"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/buttonSetDestinationType"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="125dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="35dp"
+            android:background="@drawable/rounded_button"
+            android:textColor="@color/PrimaryLight"
             android:text="Выбрать тип"
-            android:layout_below="@id/destinationPhoneNumberEditText" />
+            android:layout_below="@id/destinationPhoneNumberEditTextLayout" />
 
-        <EditText
-            android:id="@+id/destinationTypeEditText"
-            android:layout_width="280dp"
-            android:layout_height="40dp"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@id/destinationPhoneNumberEditText"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+        <android.support.design.widget.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
+            android:id="@+id/destinationTypeEditTextLayout"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="25dp"
             android:layout_toEndOf="@id/buttonSetDestinationType"
-            android:inputType="textPersonName"
+            android:layout_below="@id/destinationPhoneNumberEditTextLayout"
             android:visibility="invisible"
-            android:hint="Название компании"
-            android:textSize="16sp" />
+            android:textSize="16sp">
+            <EditText
+                android:id="@+id/destinationTypeEditText"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/destinationPhoneNumberEditTextLayout"
+                android:layout_toEndOf="@id/buttonSetDestinationType"
+                android:inputType="textPersonName"
+                android:hint="Название компании"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
+
         <TextView
             android:id="@+id/headTextParcel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Данные посылки:"
-            android:textSize="25sp"
-            android:paddingStart="40sp"
-            android:layout_centerHorizontal="true"
-            android:background="@color/colorAccentLite"
+            android:textSize="24sp"
+            android:layout_marginTop="18dp"
+            android:layout_marginStart="18dp"
             android:layout_below="@id/buttonSetDestinationType"
             />
-        <Button
-            android:id="@+id/buttonSetCoordinates"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_centerHorizontal="true"
-            android:text="Указать координаты"
-            android:layout_below="@id/headTextParcel" />
-
-        <EditText
-            android:id="@+id/parcelNameEditText"
+        <View
             android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorAccent"
+            android:layout_marginStart="18dp"
+            android:layout_below="@id/headTextParcel"/>
+
+        <android.support.design.widget.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
+            android:id="@+id/parcelNameEditTextLayout"
             android:layout_height="match_parent"
-            android:layout_below="@id/buttonSetCoordinates"
-            android:layout_marginEnd="16dp"
+            android:layout_width="match_parent"
+            android:layout_below="@id/headTextParcel"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="18dp"
+            android:textSize="16sp">
+            <EditText
+                android:id="@+id/parcelNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/headTextParcel"
+                android:inputType="textPersonName"
+                android:hint="Название*"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
+            android:id="@+id/parcelSizeEditTextLayout"
+            android:layout_height="match_parent"
+            android:layout_width="94dp"
+            android:layout_below="@id/parcelNameEditTextLayout"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="18dp"
+            android:textSize="16sp">
+            <EditText
+                android:id="@+id/parcelSizeEditText"
+                android:layout_width="94dp"
+                android:layout_height="match_parent"
+                android:layout_below="@id/parcelNameEditTextLayout"
+                android:inputType="number"
+                android:hint="Размер*"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
+            android:id="@+id/parcelWeighEditTextLayout"
+            android:layout_height="match_parent"
+            android:layout_width="84dp"
+            android:layout_below="@id/parcelNameEditTextLayout"
+            android:layout_toEndOf="@id/parcelSizeEditTextLayout"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:inputType="textPersonName"
-            android:hint="Название(*)"
-            android:textSize="16sp" />
-        <EditText
-            android:id="@+id/parcelSizeEditText"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_below="@id/parcelNameEditText"
-            android:layout_marginEnd="16dp"
+            android:layout_marginTop="18dp"
+            android:textSize="16sp">
+            <EditText
+                android:id="@+id/parcelWeighEditText"
+                android:layout_width="84dp"
+                android:layout_height="match_parent"
+                android:layout_below="@id/parcelNameEditTextLayout"
+                android:layout_toEndOf="@id/parcelSizeEditTextLayout"
+                android:inputType="number"
+                android:hint="Вес*"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
+            android:id="@+id/deliveryDateEditTextLayout"
+            android:layout_height="match_parent"
+            android:layout_width="110dp"
+            android:layout_below="@id/parcelNameEditTextLayout"
+            android:layout_toEndOf="@id/parcelWeighEditTextLayout"
             android:layout_marginStart="16dp"
-            android:inputType="number"
-            android:hint="Размер(*)"
-            android:textSize="16sp" />
-        <EditText
-            android:id="@+id/parcelWeighEditText"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_below="@id/parcelNameEditText"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_toEndOf="@id/parcelSizeEditText"
-            android:inputType="number"
-            android:hint="Вес(*)"
-            android:textSize="16sp" />
-        <TextView
-            android:id="@+id/deliveryDateText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
-            android:text="Дата доставки(*)"
-            android:textSize="16sp"
-            android:layout_below="@id/parcelSizeEditText"
-            android:layout_alignParentStart="true"/>
-        <EditText
-            android:id="@+id/deliveryDateEditText"
-            android:focusable="false"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_below="@id/parcelSizeEditText"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_toEndOf="@id/deliveryDateText"
-            android:inputType="phone"
-            android:textSize="16sp" />
+            android:layout_marginTop="18dp"
+            android:textSize="16sp">
+            <EditText
+                android:id="@+id/deliveryDateEditText"
+                android:focusableInTouchMode="false"
+                android:layout_height="match_parent"
+                android:layout_width="110dp"
+                android:layout_below="@id/parcelNameEditTextLayout"
+                android:layout_toEndOf="@id/parcelWeighEditTextLayout"
+                android:hint="Дата доставки"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
+
         <TextView
             android:id="@+id/priceTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="80dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="18dp"
             android:text="Цена:"
             android:textSize="25sp"
-            android:layout_below="@id/deliveryDateText"/>
+            android:layout_below="@id/parcelSizeEditTextLayout"/>
         <TextView
             android:id="@+id/priceTextViewValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="80dp"
-            android:text="Бесценно"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="18dp"
             android:textSize="25sp"
             android:textColor="@android:color/holo_green_light"
-            android:layout_below="@id/deliveryDateText"
+            android:layout_below="@id/parcelSizeEditTextLayout"
             android:layout_toRightOf="@id/priceTextView"/>
 
-        <EditText
-            android:id="@+id/commentEditText"
+
+        <android.support.design.widget.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
+            android:id="@+id/commentEditTextLayout"
+            android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_below="@id/priceTextViewValue"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:hint="Введите комментарий"
+            android:layout_below="@id/priceTextView"
             android:visibility="invisible"
-            android:textSize="16sp" />
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="18dp"
+            android:textSize="16sp">
+            <EditText
+                android:id="@+id/commentEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/priceTextView"
+                android:inputType="textMultiLine"
+                android:hint="Введите комментарий*"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/buttonNotification"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="140dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="18dp"
             android:visibility="invisible"
-            android:text="Оповестить заказчика"
-            android:layout_below="@id/commentEditText"
+            android:textColor="@color/PrimaryLight"
+            android:background="@drawable/rounded_button"
+            android:text="Оповестить"
+            android:layout_below="@id/commentEditTextLayout"
             android:layout_alignParentStart="true" />
 
         <Button
             android:id="@+id/buttonSave"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="50dp"
+            android:layout_width="140dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="18dp"
             android:layout_alignParentStart="true"
+            android:textColor="@color/PrimaryLight"
+            android:background="@drawable/rounded_button"
             android:text="Сохранить"
             android:layout_below="@id/buttonNotification" />
         <Button
             android:id="@+id/buttonChangeStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="50dp"
+            android:layout_width="160dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="18dp"
             android:visibility="invisible"
+            android:textColor="@color/PrimaryLight"
+            android:background="@drawable/rounded_button"
             android:text="Изменить статус"
             android:layout_below="@id/buttonNotification"
             android:layout_alignParentEnd="true" />

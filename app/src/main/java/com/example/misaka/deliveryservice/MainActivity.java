@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setCustomView(R.layout.app_bar);
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-            actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
         // Fab
@@ -42,6 +42,12 @@ public class MainActivity extends AppCompatActivity {
         setupViewPager(viewPager);
         tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
+        if(savedInstanceState != null){
+            TabLayout.Tab tab = tabLayout.getTabAt(savedInstanceState.getInt(getString(R.string.TabPosition)));
+            if (tab != null) {
+                tab.select();
+            }
+        }
     }
 
     public void setupViewPager(ViewPager viewPager) {
@@ -51,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         for(int i = 0; i < 3; i++) {
             Bundle bundle = new Bundle();
-            bundle.putInt("key", i);
+            bundle.putInt(getString(R.string.key), i);
             Fragment f = new Fragment();
             f.setArguments(bundle);
             fragmentList.add(f);
@@ -65,10 +71,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(getString(R.string.TabPosition), tabLayout.getSelectedTabPosition());
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
     }
-
 }

@@ -39,12 +39,16 @@
         <activity
             android:name=".AddParcel"
             android:label="@string/title_activity_add_parcel"
+            android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden" />
+            android:parentActivityName=".MainActivity"/>
         <activity
-            android:name=".CalendarActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".MapActivity"></activity>
+            android:name=".MapActivity"
+            android:label="@string/Map"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity">
+
+        </activity>
     </application>
 
 </manifest>

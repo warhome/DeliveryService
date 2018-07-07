@@ -35,7 +35,7 @@ public class Fragment extends android.support.v4.app.Fragment {
 
         Bundle bundle = getArguments();
         if(bundle != null) {
-            parcelStatus = bundle.getInt("key");
+            parcelStatus = bundle.getInt(getString(R.string.key));
         }
 
         switch (parcelStatus) {
