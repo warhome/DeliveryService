@@ -21,7 +21,7 @@ public class ServicesChecker {
             dialog.show();
         }
         else {
-            Toast.makeText(context, "GooglePlayServices is unavailable ):", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.GPS_unavailable_error, Toast.LENGTH_SHORT).show();
         }
         return false;
     }

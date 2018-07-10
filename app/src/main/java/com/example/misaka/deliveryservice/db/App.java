@@ -14,7 +14,6 @@ import android.arch.persistence.room.Room;
             super.onCreate();
             instance = this;
             database = Room.databaseBuilder(this, AppDatabase.class, "database")
-                    .allowMainThreadQueries()
                     .fallbackToDestructiveMigration()
                     .build();
 

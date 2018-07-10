@@ -9,6 +9,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,10 +20,18 @@ import com.example.misaka.deliveryservice.db.AppDatabase;
 import com.example.misaka.deliveryservice.db.Parcel;
 import com.example.misaka.deliveryservice.db.ParcelDao;
 import butterknife.BindFont;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
+
 import java.util.Calendar;
 
 public class AddParcel extends AppCompatActivity implements View.OnClickListener,
@@ -30,7 +39,31 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
         StatusDialog.StatusDialogCommunicator,
         SaveParcelDialog.SaveDialogCommunicator,
         NotificationDialog.NotificationDialogCommunicator,
-        DatePicker.DatePickerCommunicator{
+        DatePicker.DatePickerCommunicator,
+        View.OnFocusChangeListener{
+
+    private static final String ID_EXTRA = "id";
+    private static final int MAP_ACTIVITY_REQUEST_CODE = 9090;
+    private static final String CUSTOMER_TAG = "CUSTOMER";
+    private static final String DESTINATION_TAG = "DESTINATION";
+    private static final String DATE_PICKER_TAG = "DATE_PICKER";
+    private static final String COORDINATES = "coordinates";
+    private static final String PARCEL_TYPE_TAG = "PARCEL_TYPE";
+    private static final String SAVE_PARCEL_TAG = "SAVE_PARCEL";
+    private static final String NOTIFICATION_TAG = "NOTIFICATION";
+    private static final String COMPANY = "Company";
+    private static final String PERSON = "Person";
+    private static final String ACTIVE = "Active";
+    private static final String COMPLETED = "Completed";
+    private static final String ZER0 = "0";
+    private static final String DELIMITER = "-";
+    private static final String COORDINATES_DELIMITER = ",";
+    private static final String SMS = "SMS";
+    private static final String EMAIL = "Email";
+    private static final String ADDRESS = "address";
+    private static final String SMSTO = "smsto:";
+    private static final String SMS_BODY = "sms_body";
+    private static final String MAILTO = "mailto";
 
     //region ButterKnife binds
     @BindFont(R.font.thin)
@@ -115,18 +148,18 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
     TextInputLayout deliveryDateEditLayout;
     @BindView(R.id.commentEditTextLayout)
     TextInputLayout commentEditTextLayout;
+
+
     @BindView(R.id.latTextValue)
     TextView latTextValue;
     @BindView(R.id.lngTextValue)
     TextView lngTextValue;
     //endregion
 
-    public static final int CALENDAR_VIEW_REQUEST_CODE = 1010;
-    public static final int MAP_ACTIVITY_REQUEST_CODE = 9090;
-
     Parcel parcel;
     PriceCalculator priceCalculator;
     boolean isNewParcel = true;
+    boolean isParamsOk;
 
     @SuppressLint("CheckResult")
     @Override
@@ -143,42 +176,88 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        ButterKnife.bind(this);
 
+        ButterKnife.bind(this);
         parcel = new Parcel();
         priceCalculator = new PriceCalculator();
 
         setCustomerType.setOnClickListener(this);
         setDestinationType.setOnClickListener(this);
-        setDestinationType.setText(parcel.getDestinationType());
-        setCustomerType.setText(parcel.getCustomerType());
         setCoordinate.setOnClickListener(this);
         setStatus.setOnClickListener(this);
         saveParcel.setOnClickListener(this);
         sendNotification.setOnClickListener(this);
+        customerAddressEdit.setOnFocusChangeListener(this);
+        customerFullNameEdit.setOnFocusChangeListener(this);
+        customerEmailEdit.setOnFocusChangeListener(this);
+        customerPhoneNumberEdit.setOnFocusChangeListener(this);
+        destinationAddressEdit.setOnFocusChangeListener(this);
+        destinationFullNameEdit.setOnFocusChangeListener(this);
+        destinationEmailEdit.setOnFocusChangeListener(this);
+        destinationPhoneNumberEdit.setOnFocusChangeListener(this);
+        parcelNameEdit.setOnFocusChangeListener(this);
+        parcelWeighEdit.setOnFocusChangeListener(this);
+        parcelSizeEdit.setOnFocusChangeListener(this);
 
+        // DatePicker
         deliveryDateEdit.setOnClickListener(v -> {
             DatePicker datePicker = new DatePicker();
-            datePicker.show(getFragmentManager(), getString(R.string.DATE_PICKER_TAG));
+            datePicker.show(getFragmentManager(),DATE_PICKER_TAG);
         });
 
+        // Валидация
+        Observable.combineLatest(
+                RxTextView.textChanges(customerAddressEdit),
+                RxTextView.textChanges(customerFullNameEdit),
+                RxTextView.textChanges(customerPhoneNumberEdit),
+                RxTextView.textChanges(customerEmailEdit),
+                RxTextView.textChanges(destinationAddressEdit),
+                RxTextView.textChanges(destinationFullNameEdit),
+                RxTextView.textChanges(destinationPhoneNumberEdit),
+                RxTextView.textChanges(destinationEmailEdit),
+                RxTextView.textChanges(parcelNameEdit),
+                (s1,s2,s3,s4,s5,s6,s7,s8,s9)
+                        -> s1.length() > 0 && s2.length() > 0 && Patterns.PHONE.matcher(s3).matches()
+                        && (s4.length() == 0 || Patterns.EMAIL_ADDRESS.matcher(s4).matches())
+                        && s5.length() > 0 && s6.length() > 0 && Patterns.PHONE.matcher(s7).matches()
+                        && (s8.length() == 0 || Patterns.EMAIL_ADDRESS.matcher(s8).matches())
+                        &&  s9.length() > 0
+        ).subscribe(aBoolean -> isParamsOk = aBoolean);
+
+        Observable.combineLatest(
+                RxTextView.textChanges(parcelWeighEdit),
+                RxTextView.textChanges(parcelSizeEdit),
+                (s1,s2) ->  s1.length() > 0 && !s1.toString().equals(ZER0) && s2.length() > 0 && !s2.toString().equals(ZER0)
+        ).subscribe(aBoolean -> {
+            if(isParamsOk) saveParcel.setEnabled(aBoolean);
+        });
+
+        // Расчёт цены доставки
         Observable.combineLatest(RxTextView.textChanges(parcelSizeEdit),
                 RxTextView.textChanges(parcelWeighEdit),
                 RxTextView.textChanges(deliveryDateEdit),
-                (s1, s2, s3) -> s1.length() > 0 && s2.length() > 0 && s3.length() > 0
+                (s1, s2, s3) -> s1.length() > 0  && !s1.toString().equals(ZER0) && s2.length() > 0  && !s2.toString().equals(ZER0) && s3.length() > 0
         ).subscribe(aBoolean -> {
             if (aBoolean)
                 onUpdatePrice(parcelSizeEdit.getText().toString(), parcelWeighEdit.getText().toString(), deliveryDateEdit.getText().toString());
+            else
+                priceTextView.setText(DELIMITER);
         });
 
         // Берём данные о посылке из intent
         Intent intent = getIntent();
-        if (intent.hasExtra(getString(R.string.id))) {
+        if (intent.hasExtra(ID_EXTRA)) {
             isNewParcel = false;
             AppDatabase database = App.getInstance().getDatabase();
             final ParcelDao parcelDao = database.lessonDao();
-            parcel = parcelDao.getById(intent.getIntExtra(getString(R.string.id), 0));
-            setViews(parcel);
+
+            parcelDao.getById(intent.getIntExtra(ID_EXTRA, 0))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(getParcel -> {
+                        parcel = getParcel;
+                        setViews(parcel);
+                    });
+            saveParcel.setEnabled(true);
         } else {
             setDefaultDeliveryDate();
         }
@@ -189,37 +268,26 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
         switch (v.getId()) {
             case R.id.buttonSetCustomerType:
                 TypeDialog setCustomerTypeDialog = new TypeDialog();
-                setCustomerTypeDialog.show(getFragmentManager(), getString(R.string.SET_CUSTOMER_TYPE_TAG));
+                setCustomerTypeDialog.show(getFragmentManager(),CUSTOMER_TAG);
                 break;
             case R.id.buttonSetDestinationType:
                 TypeDialog setDestinationTypeDialog = new TypeDialog();
-                setDestinationTypeDialog.show(getFragmentManager(), getString(R.string.SET_DESTINATION_TYPE_TAG));
+                setDestinationTypeDialog.show(getFragmentManager(),DESTINATION_TAG);
                 break;
             case R.id.buttonSetCoordinates:
                 Intent intent = new Intent(v.getContext(), MapActivity.class);
                 if (parcel.getCoordinates() != null && !parcel.getCoordinates().isEmpty()) {
-                    intent.putExtra(getString(R.string.coordinates), parcel.getCoordinates());
+                    intent.putExtra(COORDINATES, parcel.getCoordinates());
                 }
                 startActivityForResult(intent, MAP_ACTIVITY_REQUEST_CODE);
                 break;
             case R.id.buttonChangeStatus:
                 StatusDialog statusDialog = new StatusDialog();
-                statusDialog.show(getFragmentManager(), getString(R.string.SET_PARCEL_TYPE));
+                statusDialog.show(getFragmentManager(),PARCEL_TYPE_TAG);
                 break;
             case R.id.buttonSave:
-                if (!customerAddressEdit.getText().toString().isEmpty()
-                        && !customerFullNameEdit.getText().toString().isEmpty()
-                        && !customerPhoneNumberEdit.getText().toString().isEmpty()
-                        && !destinationAddressEdit.getText().toString().isEmpty()
-                        && !destinationFullNameEdit.getText().toString().isEmpty()
-                        && !destinationPhoneNumberEdit.getText().toString().isEmpty()
-                        && !parcelNameEdit.getText().toString().isEmpty()
-                        && !parcelSizeEdit.getText().toString().isEmpty()
-                        && !parcelWeighEdit.getText().toString().isEmpty()) {
-
                     onUpdateParcelFromEditTexts(parcel);
-
-                    if (parcel.getStatus().equals(getString(R.string.Completed)) && commentEditText.getText().toString().isEmpty()) {
+                    if (parcel.getStatus().equals(COMPLETED) && commentEditText.getText().toString().isEmpty()) {
                         Toast.makeText(getApplicationContext(), R.string.Enter_comment, Toast.LENGTH_SHORT).show();
                         break;
                     } else {
@@ -228,30 +296,22 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
 
                     if (parcel.getCoordinates() == null || parcel.getCoordinates().isEmpty()) {
                         SaveParcelDialog saveParcelDialog = new SaveParcelDialog();
-                        saveParcelDialog.show(getFragmentManager(), getString(R.string.SAVE_PARCEL_TAG));
+                        saveParcelDialog.show(getFragmentManager(),SAVE_PARCEL_TAG);
                         break;
                     }
-
                     AppDatabase database = App.getInstance().getDatabase();
                     final ParcelDao parcelDao = database.lessonDao();
-                    if (isNewParcel)
-                        parcelDao.insert(parcel);
-                    else
-                        parcelDao.update(parcel);
-                    finish();
-
-                } else {
-                    // TODO: Вывести AssistiveText(?) для TextInputLayout
-                    Toast.makeText(getApplicationContext(), "Заполните все необходимые поля", Toast.LENGTH_SHORT).show();
-                }
+                    Completable.fromRunnable(() -> parcelDao.insert(parcel))
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(this::finish);
                 break;
             case R.id.buttonNotification:
                 if(customerEmailEdit.getText().toString().isEmpty() && !customerPhoneNumberEdit.getText().toString().isEmpty()) {
-                    sendNotification(getString(R.string.SMS));
+                    sendNotification(SMS);
                 }
                 else{
                    NotificationDialog notificationDialog = new NotificationDialog();
-                   notificationDialog.show(getFragmentManager(), getString(R.string.NOTIFICATION_DIALOG));
+                   notificationDialog.show(getFragmentManager(), NOTIFICATION_TAG);
                 }
                 break;
             default:
@@ -261,25 +321,25 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
 
     @Override
     public void onUpdateType(int which, String tag) {
-        if(tag.equals(getString(R.string.SET_CUSTOMER_TYPE_TAG))) {
+        if(tag.equals(CUSTOMER_TAG)) {
             if (which == 0) {
-                parcel.setCustomerType(getString(R.string.Company));
+                parcel.setCustomerType(COMPANY);
                 customerCompanyNameEditLayout.setVisibility(View.VISIBLE);
-                setCustomerType.setText(R.string.Company);
+                setCustomerType.setText(R.string.btn_company);
                     } else {
-                        parcel.setCustomerType(getString(R.string.Person));
+                        parcel.setCustomerType(PERSON);
                         customerCompanyNameEditLayout.setVisibility(View.INVISIBLE);
-                        setCustomerType.setText(R.string.Person);
+                        setCustomerType.setText(R.string.btn_person);
                     }
         } else {
             if (which == 0) {
-                parcel.setDestinationType(getString(R.string.Company));
+                parcel.setDestinationType(COMPANY);
                 destinationCompanyNameEditLayout.setVisibility(View.VISIBLE);
-                setDestinationType.setText(R.string.Company);
+                setDestinationType.setText(R.string.btn_company);
             } else {
-                parcel.setDestinationType(getString(R.string.Person));
+                parcel.setDestinationType(PERSON);
                 destinationCompanyNameEditLayout.setVisibility(View.INVISIBLE);
-                setDestinationType.setText(R.string.Person);
+                setDestinationType.setText(R.string.btn_person);
             }
         }
     }
@@ -294,27 +354,27 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
     public void onUpdateStatus(int which, String tag) {
         switch (which) {
             case 0:
-                parcel.setStatus(getString(R.string.Active));
+                parcel.setStatus(ACTIVE);
                 commentEditTextLayout.setVisibility(View.INVISIBLE);
                 sendNotification.setVisibility(View.INVISIBLE);
                 break;
             case 1:
-                parcel.setStatus(getString(R.string.Completed));
+                parcel.setStatus(COMPLETED);
                 commentEditTextLayout.setVisibility(View.VISIBLE);
                 sendNotification.setVisibility(View.VISIBLE);
                 break;
         }
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void isSaveParcel(boolean b, String tag) {
         AppDatabase database = App.getInstance().getDatabase();
         final ParcelDao parcelDao = database.lessonDao();
         if(b) {
-            if (isNewParcel)
-                parcelDao.insert(parcel);
-            else
-                parcelDao.update(parcel);
+            Completable.fromRunnable(() -> parcelDao.insert(parcel))
+                    .subscribeOn(Schedulers.io())
+                    .subscribe();
             finish();
         }
     }
@@ -323,26 +383,27 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
     public void onChoiceNotification(int which, String tag) {
         switch (which) {
             case 0:
-                sendNotification(getString(R.string.SMS));
+                sendNotification(SMS);
                 break;
             case 1:
-                sendNotification(getString(R.string.Email));
+                sendNotification(EMAIL);
                 break;
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CALENDAR_VIEW_REQUEST_CODE && resultCode == RESULT_OK) {
-            String returnString = data.getStringExtra(getString(R.string.data));
-            deliveryDateEdit.setText(returnString);
-        }
         if (requestCode == MAP_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            String returnString = data.getStringExtra(getString(R.string.coordinates));
-            parcel.setCoordinates(returnString);
-            String[] latlng = returnString.split(getString(R.string.coordinates_delimiter));
+            String returnStringCoordinates = data.getStringExtra(COORDINATES);
+            String returnStringAddress = data.getStringExtra(ADDRESS);
+            parcel.setCoordinates(returnStringCoordinates);
+            if(returnStringAddress != null && !returnStringAddress.isEmpty()) {
+                destinationAddressEdit.setText(returnStringAddress);
+            }
+            String[] latlng = returnStringCoordinates.split(COORDINATES_DELIMITER);
             latTextValue.setText(latlng[0]);
             lngTextValue.setText(latlng[1]);
+            destinationAddressEditTextLayout.setErrorEnabled(false);
         }
     }
 
@@ -365,19 +426,30 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
         deliveryDateEdit.setText(parcel.getDeliveryDate());
         priceTextView.setText(parcel.getPrice());
 
-        if (parcel.getCustomerType().equals(getString(R.string.Company))) {
-            customerCompanyNameEdit.setVisibility(View.VISIBLE);
+        if (parcel.getCustomerType().equals(COMPANY)) {
+            customerCompanyNameEditLayout.setVisibility(View.VISIBLE);
+            setCustomerType.setText(R.string.btn_company);
+        } else {
+            setCustomerType.setText(R.string.btn_person);
         }
-        if (parcel.getDestinationType().equals(getString(R.string.Company))) {
-            destinationCompanyNameEdit.setVisibility(View.VISIBLE);
+        if (parcel.getDestinationType().equals(COMPANY)) {
+            destinationCompanyNameEditLayout.setVisibility(View.VISIBLE);
+            setDestinationType.setText(R.string.btn_company);
+        } else {
+            setDestinationType.setText(R.string.btn_person);
         }
-        if (parcel.getStatus().equals(getString(R.string.Completed))) {
-            commentEditText.setVisibility(View.VISIBLE);
+        if (parcel.getStatus().equals(COMPLETED)) {
+            commentEditTextLayout.setVisibility(View.VISIBLE);
             sendNotification.setVisibility(View.VISIBLE);
             commentEditText.setText(parcel.getComment());
         }
         if(!isNewParcel) {
             setStatus.setVisibility(View.VISIBLE);
+        }
+        if(parcel.getCoordinates() != null && !parcel.getCoordinates().isEmpty()) {
+            String[] latlng = parcel.getCoordinates().split(COORDINATES_DELIMITER);
+            latTextValue.setText(latlng[0]);
+            lngTextValue.setText(latlng[1]);
         }
     }
 
@@ -405,8 +477,8 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
         int Date = calendar.get(Calendar.DAY_OF_MONTH);
         int Month = calendar.get(Calendar.MONTH);
         int Year = calendar.get(Calendar.YEAR);
-        return String.valueOf(Date) + getString(R.string.date_delimiter)
-                + String.valueOf(Month + 1) + getString(R.string.date_delimiter)
+        return String.valueOf(Date) + DELIMITER
+                + String.valueOf(Month + 1) + DELIMITER
                 + String.valueOf(Year);
     }
 
@@ -415,14 +487,14 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
     }
 
     public void sendNotification(String type) {
-        if(type.equals(getString(R.string.SMS))) {
-            String toSms = getString(R.string.smsto) + customerPhoneNumberEdit.getText().toString();
+        if(type.equals(SMS)) {
+            String toSms = SMSTO + customerPhoneNumberEdit.getText().toString();
             Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(toSms));
-            intent.putExtra(getString(R.string.sms_body), getString(R.string.notification_title));
+            intent.putExtra(SMS_BODY, getString(R.string.notification_title));
             startActivity(intent);
         }
         else {
-            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(getString(R.string.mailto),customerEmailEdit.getText().toString(), null));
+            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(MAILTO,customerEmailEdit.getText().toString(), null));
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.EXTRA_SUBJECT_VALUE));
             startActivity(Intent.createChooser(emailIntent, getString(R.string.notification_title)));
         }
@@ -430,8 +502,83 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
 
     @Override
     public void onUpdateDate(String year, String month, String day, String tag) {
-        String date = day + getString(R.string.date_delimiter) + month + getString(R.string.date_delimiter) + year;
+        String date = day + DELIMITER + month + DELIMITER + year;
         parcel.setDeliveryDate(date);
         deliveryDateEdit.setText(date);
+    }
+
+    @Override
+    public void onFocusChange(View view, boolean isFocused) {
+        if (isFocused) return;
+        switch (view.getId()) {
+            case R.id.customerAddressEditText:
+                if(customerAddressEdit.getText().toString().isEmpty()) {
+                    customerAddressEditTextLayout.setErrorEnabled(true);
+                    customerAddressEditTextLayout.setError(getString(R.string.empty_string_error));
+                } else customerAddressEditTextLayout.setErrorEnabled(false);
+                break;
+            case R.id.customerFullNameEditText:
+                if(customerFullNameEdit.getText().toString().isEmpty()) {
+                    customerFullNameEditTextLayout.setErrorEnabled(true);
+                    customerFullNameEditTextLayout.setError(getString(R.string.empty_string_error));
+                } else customerFullNameEditTextLayout.setErrorEnabled(false);
+                break;
+            case R.id.customerPhoneNumberEditText:
+                if(!Patterns.PHONE.matcher(customerPhoneNumberEdit.getText().toString()).matches()) {
+                    customerPhoneNumberEditTextLayout.setErrorEnabled(true);
+                    customerPhoneNumberEditTextLayout.setError(getString(R.string.error_phone_number));
+                }
+                else customerPhoneNumberEditTextLayout.setErrorEnabled(false);
+                break;
+            case R.id.customerEmailEditText:
+                if( !customerEmailEdit.getText().toString().isEmpty()
+                        && !Patterns.EMAIL_ADDRESS.matcher(customerEmailEdit.getText().toString()).matches() ) {
+                    customerEmailEditTextLayout.setErrorEnabled(true);
+                    customerEmailEditTextLayout.setError(getString(R.string.error_email_format));
+                } else customerEmailEditTextLayout.setErrorEnabled(false);
+                break;
+            case R.id.destinationAddressEditText:
+                if(destinationAddressEdit.getText().toString().isEmpty()) {
+                    destinationAddressEditTextLayout.setErrorEnabled(true);
+                    destinationAddressEditTextLayout.setError(getString(R.string.empty_string_error));
+                } else destinationAddressEditTextLayout.setErrorEnabled(false);
+                break;
+            case R.id.destinationFullNameEditText:
+                if(destinationFullNameEdit.getText().toString().isEmpty()) {
+                    destinationFullNameEditTextLayout.setErrorEnabled(true);
+                    destinationFullNameEditTextLayout.setError(getString(R.string.empty_string_error));
+                } else destinationFullNameEditTextLayout.setErrorEnabled(false);
+                break;
+            case R.id.destinationPhoneNumberEditText:
+                if(!Patterns.PHONE.matcher(destinationPhoneNumberEdit.getText().toString()).matches()) {
+                    destinationPhoneNumberEditTextLayout.setErrorEnabled(true);
+                    destinationPhoneNumberEditTextLayout.setError(getString(R.string.error_phone_number));
+                }
+                else destinationPhoneNumberEditTextLayout.setErrorEnabled(false);
+                break;
+            case R.id.destinationEmailEditText:
+                if( !destinationEmailEdit.getText().toString().isEmpty()
+                        && !Patterns.EMAIL_ADDRESS.matcher(destinationEmailEdit.getText().toString()).matches() ) {
+                    destinationEmailEditTextLayout.setErrorEnabled(true);
+                    destinationEmailEditTextLayout.setError(getString(R.string.error_email_format));
+                } else destinationEmailEditTextLayout.setErrorEnabled(false);
+                break;
+            case R.id.parcelNameEditText:
+                if(parcelNameEdit.getText().toString().isEmpty()) {
+                    parcelNameEditLayout.setErrorEnabled(true);
+                    parcelNameEditLayout.setError(getString(R.string.empty_string_error));
+                } else parcelNameEditLayout.setErrorEnabled(false);
+                break;
+            case R.id.parcelWeighEditText:
+                if(parcelWeighEdit.getText().toString().isEmpty()||parcelWeighEdit.getText().toString().equals("0")) {
+                    parcelWeighEditLayout.setErrorEnabled(true);
+                } else parcelWeighEditLayout.setErrorEnabled(false);
+                break;
+            case R.id.parcelSizeEditText:
+                if(parcelSizeEdit.getText().toString().isEmpty()||parcelSizeEdit.getText().toString().equals("0")) {
+                    parcelSizeEditLayout.setErrorEnabled(true);
+                } else parcelSizeEditLayout.setErrorEnabled(false);
+                break;
+        }
     }
 }

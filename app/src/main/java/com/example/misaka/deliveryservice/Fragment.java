@@ -10,10 +10,23 @@ import android.view.ViewGroup;
 
 import com.example.misaka.deliveryservice.db.App;
 import com.example.misaka.deliveryservice.db.AppDatabase;
+import com.example.misaka.deliveryservice.db.Parcel;
 import com.example.misaka.deliveryservice.db.ParcelDao;
+
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
+import java.util.List;
+
+import io.reactivex.Completable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subscribers.ResourceSubscriber;
 
 public class Fragment extends android.support.v4.app.Fragment {
 
+    private static final String KEY_BUNDLE = "key";
     private RecyclerViewAdapter adapter;
     private int parcelStatus;
 
@@ -35,22 +48,36 @@ public class Fragment extends android.support.v4.app.Fragment {
 
         Bundle bundle = getArguments();
         if(bundle != null) {
-            parcelStatus = bundle.getInt(getString(R.string.key));
+            parcelStatus = bundle.getInt(KEY_BUNDLE);
         }
 
         switch (parcelStatus) {
             case 0:
-                adapter = new RecyclerViewAdapter(parcelDao.getActive());
+                parcelDao.getActive()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(parcels -> {
+                            adapter = new RecyclerViewAdapter(parcels);
+                            recyclerView.setAdapter(adapter);
+                        });
                 break;
             case 1:
-                adapter = new RecyclerViewAdapter(parcelDao.getCompleted());
+                parcelDao.getCompleted()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(parcels -> {
+                            adapter = new RecyclerViewAdapter(parcels);
+                            recyclerView.setAdapter(adapter);
+                        });
                 break;
             case 2:
-                adapter = new RecyclerViewAdapter(parcelDao.getAll());
+                parcelDao.getAll()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(parcels -> {
+                            adapter = new RecyclerViewAdapter(parcels);
+                            recyclerView.setAdapter(adapter);
+                        });
                 break;
             default:
         }
-        recyclerView.setAdapter(adapter);
         return view;
     }
 }

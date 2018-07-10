@@ -14,9 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    // TODO: Сделать проверку GooglePlayServices
+    private static final String KEY_BUNDLE = "key";
     private ViewPager viewPager;
     private TabLayout tabLayout;
+    private int currTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +26,14 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPager);
         ServicesChecker servicesChecker = new ServicesChecker();
         servicesChecker.isServicesOK(getApplicationContext(), this);
+
         // Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setCustomView(R.layout.app_bar);
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            actionBar.setCustomView(R.layout.app_bar);
         }
 
         // Fab
@@ -42,12 +44,6 @@ public class MainActivity extends AppCompatActivity {
         setupViewPager(viewPager);
         tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
-        if(savedInstanceState != null){
-            TabLayout.Tab tab = tabLayout.getTabAt(savedInstanceState.getInt(getString(R.string.TabPosition)));
-            if (tab != null) {
-                tab.select();
-            }
-        }
     }
 
     public void setupViewPager(ViewPager viewPager) {
@@ -57,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         for(int i = 0; i < 3; i++) {
             Bundle bundle = new Bundle();
-            bundle.putInt(getString(R.string.key), i);
+            bundle.putInt(KEY_BUNDLE, i);
             Fragment f = new Fragment();
             f.setArguments(bundle);
             fragmentList.add(f);
@@ -70,10 +66,11 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
+    // Сворачивание
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(getString(R.string.TabPosition), tabLayout.getSelectedTabPosition());
+    protected void onPause() {
+        super.onPause();
+        currTab = viewPager.getCurrentItem();
     }
 
     @Override
@@ -81,5 +78,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
+        viewPager.setCurrentItem(currTab);
     }
 }

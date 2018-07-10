@@ -498,7 +498,8 @@
             android:textColor="@color/PrimaryLight"
             android:background="@drawable/rounded_button"
             android:text="Сохранить"
-            android:layout_below="@id/buttonNotification" />
+            android:layout_below="@id/buttonNotification"
+            android:enabled="false"/>
         <Button
             android:id="@+id/buttonChangeStatus"
             android:layout_width="160dp"

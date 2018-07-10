@@ -8,13 +8,15 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class PriceCalculator {
+    private static final String DATE_PATTERN = "dd-MM-yyyy";
+    private static final String ZERO = "0";
 
     // TODO: Реализовать CalculatePrice через SharedPreferences(?) для разных единиц измерения
 
     private final double MIN_PRICE = 500;
 
     public double CalculateInKgM(String size, String weight, String days) {
-        double price = Double.valueOf(size) * 100 + Double.valueOf(weight) * 10 + Double.valueOf(days) * 10;
+        double price = Double.valueOf(size) * 100 + Double.valueOf(weight) * 100 + Double.valueOf(days) * 10;
         if (price < MIN_PRICE) return  MIN_PRICE;
         else return price;
     }
@@ -24,7 +26,7 @@ public class PriceCalculator {
     }
 
     public String CalculateDeliveryDays(String current, String delivery) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_PATTERN);
         try {
             Date currentDate = simpleDateFormat.parse(current);
             Date deliveryDate = simpleDateFormat.parse(delivery);
@@ -33,7 +35,7 @@ public class PriceCalculator {
             return Long.toString(differenceDates);
         } catch (ParseException e) {
             e.printStackTrace();
-            return "0";
+            return ZERO;
         }
     }
 }

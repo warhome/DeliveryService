@@ -10,13 +10,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.misaka.deliveryservice.db.Parcel;
-
 import java.util.Collections;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ParcelViewHolder> {
+
+    private static final String ID_EXTRA = "id";
+    private static final String IS_RECYCLER_INTENT = "isRecyclerIntent";
+    private static final String COORDINATES = "coordinates";
+    private static final String ACTIVE = "Active";
+    private static final String COMPLETED = "Completed";
+    private static final String ACTIVE_COLOR = "#27ae60";
+    private static final String COMPLETED_COLOR = "#95a5a6";
+    private static final String ERROR_COLOR = "#e74c3c";
 
     private List<Parcel> parcels;
 
@@ -57,7 +64,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         // Start AddParcel activity
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), AddParcel.class);
-            intent.putExtra("id", parcels.get(currPosition).getId());
+            intent.putExtra(ID_EXTRA, parcels.get(currPosition).getId());
             v.getContext().startActivity(intent);
         });
 
@@ -65,12 +72,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.ShowInMapButton.setOnClickListener(v -> {
             if(parcels.get(position).getCoordinates() != null && !parcels.get(position).getCoordinates().isEmpty()) {
                 Intent intent = new Intent(v.getContext(), MapActivity.class);
-                intent.putExtra("isRecyclerIntent", true);
-                intent.putExtra("coordinates", parcels.get(position).getCoordinates());
+                intent.putExtra(IS_RECYCLER_INTENT, true);
+                intent.putExtra(COORDINATES, parcels.get(position).getCoordinates());
                 v.getContext().startActivity(intent);
             }
             else {
-                Toast.makeText(v.getContext(),"Координаты посылки не установлены", Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), R.string.coordinates_not_found_error, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -80,14 +87,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.Status.setText(parcels.get(position).getStatus());
 
         switch (parcels.get(position).getStatus()) {
-            case "Active":
-                holder.Status.setTextColor(Color.parseColor("#27ae60"));
+            case ACTIVE:
+                holder.Status.setTextColor(Color.parseColor(ACTIVE_COLOR));
                 break;
-            case "Completed":
-                holder.Status.setTextColor(Color.parseColor("#95a5a6"));
+            case COMPLETED:
+                holder.Status.setTextColor(Color.parseColor(COMPLETED_COLOR));
                 break;
             default:
-                holder.Status.setTextColor(Color.parseColor("#e74c3c"));
+                holder.Status.setTextColor(Color.parseColor(ERROR_COLOR));
                 break;
         }
     }

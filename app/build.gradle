@@ -36,10 +36,10 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'io.reactivex.rxjava2:rxjava:2.1.16'
+    implementation "android.arch.persistence.room:rxjava2:1.1.1"
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
     implementation 'com.jakewharton.rxbinding2:rxbinding-support-v4:2.1.1'
     implementation 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.1.1'
     compile 'com.google.android.gms:play-services-maps:15.0.1'
     compile 'com.google.android.gms:play-services-location:15.0.1'
-    compile 'com.google.android.gms:play-services-places:15.0.1'
 }

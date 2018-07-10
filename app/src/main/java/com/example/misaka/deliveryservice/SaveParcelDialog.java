@@ -20,9 +20,9 @@ public class SaveParcelDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
-        builder.setMessage("Не указаны координаты посылки")
-                .setPositiveButton("Сохранить", (dialog, id) -> saveDialogCommunicator.isSaveParcel(true, getTag()))
-                .setNegativeButton("Отмена", (dialog, id) -> saveDialogCommunicator.isSaveParcel(false, getTag()));
+        builder.setMessage(getResources().getString(R.string.coordinates_not_found_error))
+                .setPositiveButton(R.string.Save_whatever, (dialog, id) -> saveDialogCommunicator.isSaveParcel(true, getTag()))
+                .setNegativeButton(R.string.cancel, (dialog, id) -> saveDialogCommunicator.isSaveParcel(false, getTag()));
         return builder.create();
     }
 
