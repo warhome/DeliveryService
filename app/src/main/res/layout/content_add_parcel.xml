@@ -14,7 +14,7 @@
             android:id="@+id/headTextCustomer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Данные заказчика:"
+            android:text="@string/customer_head"
             android:textSize="24sp"
             android:layout_marginTop="18dp"
             android:layout_marginStart="18dp"
@@ -39,7 +39,7 @@
                 android:id="@+id/customerAddressEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Адрес*"
+                android:hint="@string/hint_address"
                 android:inputType="textPersonName"
                 android:textSize="16sp" />
         </android.support.design.widget.TextInputLayout>
@@ -60,7 +60,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/customerAddressEditTextLayout"
                 android:inputType="textPersonName"
-                android:hint="ФИО*"
+                android:hint="@string/hint_fullname"
                 android:textSize="16sp" />
         </android.support.design.widget.TextInputLayout>
 
@@ -80,7 +80,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/customerFullNameEditTextLayout"
                 android:inputType="textEmailAddress"
-                android:hint="Email"
+                android:hint="@string/email"
                 android:textSize="16sp" />
         </android.support.design.widget.TextInputLayout>
 
@@ -100,7 +100,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/customerEmailEditTextLayout"
                 android:inputType="phone"
-                android:hint="Телефон*"
+                android:hint="@string/hint_phone"
                 android:textSize="16sp" />
         </android.support.design.widget.TextInputLayout>
 
@@ -113,7 +113,7 @@
             android:layout_marginTop="30dp"
             android:background="@drawable/rounded_button"
             android:textColor="@color/PrimaryLight"
-            android:text="Выбрать тип"
+            android:text="@string/btn_set_type"
             android:layout_below="@id/customerPhoneNumberEditTextLayout" />
 
         <android.support.design.widget.TextInputLayout
@@ -136,7 +136,7 @@
                 android:layout_below="@id/customerPhoneNumberEditTextLayout"
                 android:layout_toEndOf="@id/buttonSetCustomerType"
                 android:inputType="textPersonName"
-                android:hint="Название компании"
+                android:hint="@string/hint_company_name"
                 android:textSize="16sp" />
         </android.support.design.widget.TextInputLayout>
 
@@ -144,7 +144,7 @@
             android:id="@+id/headTextDestination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Данные адресата:"
+            android:text="@string/destination_head"
             android:textSize="24sp"
             android:layout_marginTop="50dp"
             android:layout_marginStart="18dp"
@@ -173,7 +173,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/headTextDestination"
                 android:inputType="textPersonName"
-                android:hint="Адрес*"
+                android:hint="@string/hint_address"
                 android:textSize="16sp" />
         </android.support.design.widget.TextInputLayout>
 
@@ -194,7 +194,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
-            android:text="Координаты"
+            android:text="@string/coordinates_head"
             android:textSize="16sp"
             android:layout_below="@+id/destinationAddressEditTextLayout" />
 
@@ -203,7 +203,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
-            android:text="lat:"
+            android:text="@string/lat_value_text"
             android:textSize="16sp"
             android:layout_below="@id/headCoordinates" />
 
@@ -212,7 +212,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
-            android:text="lng:"
+            android:text="@string/lng_value_text"
             android:textSize="16sp"
             android:layout_below="@id/latText"
             />
@@ -251,7 +251,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/lngText"
                 android:inputType="textPersonName"
-                android:hint="ФИО*"
+                android:hint="@string/hint_fullname"
                 android:textSize="16sp" />
         </android.support.design.widget.TextInputLayout>
 
@@ -271,7 +271,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/destinationFullNameEditTextLayout"
                 android:inputType="textEmailAddress"
-                android:hint="Email"
+                android:hint="@string/email"
                 android:textSize="16sp" />
         </android.support.design.widget.TextInputLayout>
 
@@ -291,7 +291,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/destinationEmailEditTextLayout"
                 android:inputType="phone"
-                android:hint="Телефон*"
+                android:hint="@string/hint_phone"
                 android:textSize="16sp" />
         </android.support.design.widget.TextInputLayout>
 
@@ -304,7 +304,7 @@
             android:layout_marginTop="35dp"
             android:background="@drawable/rounded_button"
             android:textColor="@color/PrimaryLight"
-            android:text="Выбрать тип"
+            android:text="@string/btn_set_type"
             android:layout_below="@id/destinationPhoneNumberEditTextLayout" />
 
         <android.support.design.widget.TextInputLayout
@@ -327,7 +327,7 @@
                 android:layout_below="@id/destinationPhoneNumberEditTextLayout"
                 android:layout_toEndOf="@id/buttonSetDestinationType"
                 android:inputType="textPersonName"
-                android:hint="Название компании"
+                android:hint="@string/hint_company_name"
                 android:textSize="16sp" />
         </android.support.design.widget.TextInputLayout>
 
@@ -335,7 +335,7 @@
             android:id="@+id/headTextParcel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Данные посылки:"
+            android:text="@string/parcel_head"
             android:textSize="24sp"
             android:layout_marginTop="18dp"
             android:layout_marginStart="18dp"
@@ -364,7 +364,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/headTextParcel"
                 android:inputType="textPersonName"
-                android:hint="Название*"
+                android:hint="@string/hint_parcel_name"
                 android:textSize="16sp" />
         </android.support.design.widget.TextInputLayout>
 
@@ -384,7 +384,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/parcelNameEditTextLayout"
                 android:inputType="number"
-                android:hint="Размер*"
+                android:hint="@string/hint_parcel_size"
                 android:textSize="16sp" />
         </android.support.design.widget.TextInputLayout>
 
@@ -405,7 +405,7 @@
                 android:layout_below="@id/parcelNameEditTextLayout"
                 android:layout_toEndOf="@id/parcelSizeEditTextLayout"
                 android:inputType="number"
-                android:hint="Вес*"
+                android:hint="@string/hint_parcel_weigh"
                 android:textSize="16sp" />
         </android.support.design.widget.TextInputLayout>
 
@@ -426,8 +426,9 @@
                 android:layout_width="110dp"
                 android:layout_below="@id/parcelNameEditTextLayout"
                 android:layout_toEndOf="@id/parcelWeighEditTextLayout"
-                android:hint="Дата доставки"
-                android:textSize="16sp" />
+                android:hint="@string/hint_delivery_date"
+                android:textSize="16sp"
+                android:inputType="date" />
         </android.support.design.widget.TextInputLayout>
 
         <TextView
@@ -436,7 +437,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:layout_marginTop="18dp"
-            android:text="Цена:"
+            android:text="@string/hint_price"
             android:textSize="25sp"
             android:layout_below="@id/parcelSizeEditTextLayout"/>
         <TextView
@@ -448,7 +449,7 @@
             android:textSize="25sp"
             android:textColor="@android:color/holo_green_light"
             android:layout_below="@id/parcelSizeEditTextLayout"
-            android:layout_toRightOf="@id/priceTextView"/>
+            android:layout_toEndOf="@id/priceTextView"/>
 
 
         <android.support.design.widget.TextInputLayout
@@ -468,7 +469,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/priceTextView"
                 android:inputType="textMultiLine"
-                android:hint="Введите комментарий*"
+                android:hint="@string/hint_comment"
                 android:textSize="16sp" />
         </android.support.design.widget.TextInputLayout>
 
@@ -482,7 +483,7 @@
             android:visibility="invisible"
             android:textColor="@color/PrimaryLight"
             android:background="@drawable/rounded_button"
-            android:text="Оповестить"
+            android:text="@string/hint_notif"
             android:layout_below="@id/commentEditTextLayout"
             android:layout_alignParentStart="true" />
 
@@ -497,7 +498,7 @@
             android:layout_alignParentStart="true"
             android:textColor="@color/PrimaryLight"
             android:background="@drawable/rounded_button"
-            android:text="Сохранить"
+            android:text="@string/hint_save"
             android:layout_below="@id/buttonNotification"
             android:enabled="false"/>
         <Button
@@ -510,7 +511,7 @@
             android:visibility="invisible"
             android:textColor="@color/PrimaryLight"
             android:background="@drawable/rounded_button"
-            android:text="Изменить статус"
+            android:text="@string/hint_set_status"
             android:layout_below="@id/buttonNotification"
             android:layout_alignParentEnd="true" />
     </RelativeLayout>

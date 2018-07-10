@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_alignParentStart="true"
-        android:text="Компания"/>
+        android:text="@string/dialog_parcel_company"/>
 
     <RadioButton
         android:id="@+id/dialogBtnIsCompany"
@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_below="@id/dialogParcelTypeCompanyText"
         android:layout_alignParentStart="true"
-        android:text="Частное лицо"/>
+        android:text="@string/dialog_parcel_person"/>
     <RadioButton
         android:id="@+id/dialogBtnIsPerson"
         android:layout_marginLeft="8dp"
