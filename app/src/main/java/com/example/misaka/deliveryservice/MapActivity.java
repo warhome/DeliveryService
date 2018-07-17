@@ -6,17 +6,17 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-import com.google.android.gms.tasks.Task;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,14 +25,24 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import static com.example.misaka.deliveryservice.Consts.ADDRESS;
+import static com.example.misaka.deliveryservice.Consts.COORDINATES;
+import static com.example.misaka.deliveryservice.Consts.COORDINATES_DELIMITER;
+
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private static final String DELIMITER = ",";
+    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+    private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private boolean isLocationPermissionGranted = false;
+    private static final int LOCATION_PERMISSION_REQUEST = 1212;
+    private static final String IS_RECYCLER_INTENT = "isRecyclerIntent";
+
     GoogleMap mMap;
     Button btn;
     String coordinates;
@@ -40,18 +50,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     ActionBar actionBar;
     LatLng markerLatLng;
 
-    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-    private boolean isLocationPermissionGranted = false;
-    private static final int LOCATION_PERMISSION_REQUEST = 1212;
-    private static final String COORDINATES = "coordinates";
-    private static final String ADDRESS = "address";
-    private static final String IS_RECYCLER_INTENT = "isRecyclerIntent";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
         //Toolbar
         Toolbar toolbar = findViewById(R.id.toolbarMap);
         setSupportActionBar(toolbar);
@@ -63,12 +66,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         getLocationPermission();
 
+        // TODO: Починить вылет
         btn = findViewById(R.id.mapBtn);
         btn.setOnClickListener(v -> {
             Intent intent = new Intent();
-            intent.putExtra(COORDINATES,coordinates);
-            intent.putExtra(ADDRESS, address);
-            setResult(RESULT_OK,intent);
+            if(coordinates != null && !coordinates.isEmpty()) {
+                intent.putExtra(COORDINATES,coordinates);
+                intent.putExtra(ADDRESS, address);
+                setResult(RESULT_OK,intent);
+            }
+            else setResult(RESULT_CANCELED);
             finish();
         });
 
@@ -92,7 +99,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mMap.setOnMapClickListener(latLng -> {
                 mMap.clear();
                 mMap.addMarker(new MarkerOptions().position(latLng));
-                coordinates = String.valueOf(latLng.latitude) + DELIMITER + String.valueOf(latLng.longitude);
+                coordinates = String.valueOf(latLng.latitude) + COORDINATES_DELIMITER + String.valueOf(latLng.longitude);
                 getAddress(latLng.latitude, latLng.longitude);
                 if(address != null) {Toast.makeText(this, address, Toast.LENGTH_SHORT).show();}
                // Toast.makeText(this, latLng.toString(), Toast.LENGTH_SHORT).show();
@@ -100,10 +107,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         if(intent.hasExtra(COORDINATES)) {
-            String[] markerCoordinates = intent.getStringExtra(COORDINATES).split(DELIMITER);
+            String[] markerCoordinates = intent.getStringExtra(COORDINATES).split(COORDINATES_DELIMITER);
             markerLatLng = new LatLng(Double.valueOf(markerCoordinates[0]), Double.valueOf(markerCoordinates[1]));
             mMap.addMarker(new MarkerOptions().position(markerLatLng));
-            moveCamera(markerLatLng, 15f);
+            moveCamera(markerLatLng);
         }
         else {
             getDeviceLocation();
@@ -146,11 +153,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         FusedLocationProviderClient mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         try {
             if(isLocationPermissionGranted) {
-                Task location = mFusedLocationProviderClient.getLastLocation();
+                Task<Location> location = mFusedLocationProviderClient.getLastLocation();
                 location.addOnCompleteListener(task -> {
                     if(task.isSuccessful()) {
-                        Location currentLocation = (Location) task.getResult();
-                        moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 15f);
+                        Location currentLocation = task.getResult();
+                        moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                     }
                     else{
                         Toast.makeText(this, R.string.unseccessful_call, Toast.LENGTH_SHORT).show();
@@ -162,8 +169,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
-    private void moveCamera(LatLng latLng, float zoom) {
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+    private void moveCamera(LatLng latLng) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f));
     }
 
     private void getAddress(double lat, double lng) {

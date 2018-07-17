@@ -1,7 +1,9 @@
 package com.example.misaka.deliveryservice;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,38 +12,53 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.misaka.deliveryservice.db.Parcel;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+import static com.example.misaka.deliveryservice.Consts.ASSIGNED;
+import static com.example.misaka.deliveryservice.Consts.CANCELED;
+import static com.example.misaka.deliveryservice.Consts.COMPLETED;
+import static com.example.misaka.deliveryservice.Consts.COORDINATES;
+import static com.example.misaka.deliveryservice.Consts.ID_EXTRA;
+import static com.example.misaka.deliveryservice.Consts.IN_PROCESS;
+import static com.example.misaka.deliveryservice.Consts.IS_ADMIN;
+import static com.example.misaka.deliveryservice.Consts.IS_RECYCLER_INTENT;
+import static com.example.misaka.deliveryservice.Consts.NEW;
+
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ParcelViewHolder> {
 
-    private static final String ID_EXTRA = "id";
-    private static final String IS_RECYCLER_INTENT = "isRecyclerIntent";
-    private static final String COORDINATES = "coordinates";
-    private static final String ACTIVE = "Active";
-    private static final String COMPLETED = "Completed";
-    private static final String ACTIVE_COLOR = "#27ae60";
+    private static final String NEW_CLOLR = "#1abc9c";
+    private static final String ASSIGNED_COLOR = "#27ae60";
+    private static final String IN_PROCESS_COLOR = "#f39c12";
     private static final String COMPLETED_COLOR = "#95a5a6";
-    private static final String ERROR_COLOR = "#e74c3c";
+    private static final String CANCELED_COLOR = "#c0392b";
 
     private List<Parcel> parcels;
 
     static class ParcelViewHolder extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.parcelName)
         TextView ParcelName;
+        @BindView(R.id.deliveryDate)
         TextView DeliveryDate;
+        @BindView(R.id.destinationAddress)
         TextView DestinationAddress;
+        @BindView(R.id.showInMapButton)
         Button   ShowInMapButton;
+        @BindView(R.id.recyclerStatusValue)
         TextView Status;
 
         ParcelViewHolder(View itemView) {
             super(itemView);
-            ParcelName = itemView.findViewById(R.id.parcelName);
-            DeliveryDate = itemView.findViewById(R.id.deliveryDate);
-            DestinationAddress = itemView.findViewById(R.id.destinationAddress);
-            ShowInMapButton = itemView.findViewById(R.id.showInMapButton);
-            Status = itemView.findViewById(R.id.recyclerStatusValue);
+            ButterKnife.bind(this, itemView);
         }
     }
 
@@ -81,20 +98,36 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         });
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(holder.itemView.getContext());
+        if(sharedPreferences.getBoolean(IS_ADMIN,false)) {
+            // Delete parcel
+            holder.itemView.setOnLongClickListener(view -> {
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("parcels");
+                databaseReference.child(parcels.get(position).getId()).removeValue();
+                return false;
+            });
+        }
+
         holder.ParcelName.setText(parcels.get(position).getParcelName());
         holder.DeliveryDate.setText(parcels.get(position).getDeliveryDate());
         holder.DestinationAddress.setText(parcels.get(position).getDestinationAddress());
         holder.Status.setText(parcels.get(position).getStatus());
 
         switch (parcels.get(position).getStatus()) {
-            case ACTIVE:
-                holder.Status.setTextColor(Color.parseColor(ACTIVE_COLOR));
+            case NEW:
+                holder.Status.setTextColor(Color.parseColor(NEW_CLOLR));
+                break;
+            case ASSIGNED:
+                holder.Status.setTextColor(Color.parseColor(ASSIGNED_COLOR));
+                break;
+            case IN_PROCESS:
+                holder.Status.setTextColor(Color.parseColor(IN_PROCESS_COLOR));
+                break;
+            case CANCELED:
+                holder.Status.setTextColor(Color.parseColor(CANCELED_COLOR));
                 break;
             case COMPLETED:
                 holder.Status.setTextColor(Color.parseColor(COMPLETED_COLOR));
-                break;
-            default:
-                holder.Status.setTextColor(Color.parseColor(ERROR_COLOR));
                 break;
         }
     }

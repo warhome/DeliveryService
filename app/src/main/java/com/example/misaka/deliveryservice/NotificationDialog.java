@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+
 import java.util.Objects;
 
 public class NotificationDialog extends DialogFragment {
@@ -21,7 +22,6 @@ public class NotificationDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
         builder.setItems(R.array.notification_params, (dialog, which) -> notificationDialogCommunicator.onChoiceNotification(which, getTag()));
-
         return builder.create();
     }
 

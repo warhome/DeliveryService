@@ -23,7 +23,8 @@
     <string name="addparcel">AddParcel</string>
     <string name="empty_string_error">Обязательно для заполнения</string>
     <string name="error_email_format">Неверный формат Email</string>
-    <string name="error_phone_number">Неверный формат номера</string>
+    <string name="error_auth_email_format">Неверный формат(используйте email аккаунта)</string>
+    <string name="error_phone_number">Номер должен быть в формате +7(8)XXXXXXXXXX (или городской номер с кодом из трёх цифр (XXX)XXXXXXX)</string>
     <string name="parcel_param_error">Размер и вес должны быть непустые и больше нуля</string>
     <string name="signin">Войти</string>
     <string name="my_parcels">Мои посылки</string>
@@ -62,4 +63,19 @@
     <string name="dialog_parcel_company">Компания</string>
     <string name="dialog_parcel_person">Частное лицо</string>
     <string name="recycler_completed">Завершённая</string>
+    <string name="title_activity_firebase_auth">Sign in</string>
+    <string name="firebase_login">Логин</string>
+    <string name="firebase_password_hint">Пароль</string>
+    <string name="firebase_login_hint">Логин</string>
+    <string name="btn_SignIn">Войти</string>
+    <string name="SignInAs">Вы вошли как</string>
+    <string name="firebase_sign_in_error">Вход не выполнен</string>
+    <string name="wrong_password_error">Длинна пароля должна быть не меньше 8 символов</string>
+    <string name="nav_email">Вход не выполнен</string>
+    <string name="nav_user_status" />
+    <string name="ADMIN">Админ</string>
+    <string name="COURIER">Курьер</string>
+    <string name="btn_choose_courier">Назначить курьера</string>
+    <string name="courier_does_not_choose_error">Необходимо назначить курьера</string>
+    <string name="invalid_fields_error">Проверьте правильность заполненных полей</string>
 </resources>

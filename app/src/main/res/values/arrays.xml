@@ -4,8 +4,13 @@
         <item>Компания</item>
         <item>Частное лицо</item>
     </string-array>
-    <string-array name="status_types" >
-        <item>Активная</item>
+    <string-array name="status_types_courier" >
+        <item>В процессе</item>
+        <item>Отклонённая</item>
+        <item>Завершённая</item>
+    </string-array>
+    <string-array name="status_types_admin" >
+        <item>Назначенная</item>
         <item>Завершённая</item>
     </string-array>
     <string-array name="notification_params" >

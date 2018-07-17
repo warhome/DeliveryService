@@ -55,7 +55,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@drawable/plus" />
+            app:srcCompat="@drawable/plus"
+            android:visibility="invisible"/>
 
     </android.support.design.widget.CoordinatorLayout>
 
@@ -65,8 +66,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:menu="@menu/drawer_view" />
-
+        app:menu="@menu/drawer_view"
+        app:headerLayout="@layout/nav_header"/>
 </android.support.v4.widget.DrawerLayout>
-
-

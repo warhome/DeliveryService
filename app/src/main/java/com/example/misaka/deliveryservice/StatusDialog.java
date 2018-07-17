@@ -9,6 +9,8 @@ import android.support.v7.app.AlertDialog;
 
 import java.util.Objects;
 
+import static com.example.misaka.deliveryservice.Consts.PARCEL_TYPE_TAG_COURIER;
+
 public class StatusDialog extends DialogFragment {
 
     public interface StatusDialogCommunicator {
@@ -21,7 +23,10 @@ public class StatusDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
-        builder.setItems(R.array.status_types, (dialog, which) -> statusDialogCommunicator.onUpdateStatus(which, getTag()));
+        if(getTag().equals(PARCEL_TYPE_TAG_COURIER))
+            builder.setItems(R.array.status_types_courier, (dialog, which) -> statusDialogCommunicator.onUpdateStatus(which, getTag()));
+        else
+            builder.setItems(R.array.status_types_admin, (dialog, which) -> statusDialogCommunicator.onUpdateStatus(which, getTag()));
         return builder.create();
     }
 

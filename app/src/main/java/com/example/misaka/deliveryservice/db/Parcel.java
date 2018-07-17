@@ -1,15 +1,12 @@
 package com.example.misaka.deliveryservice.db;
-
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-@Entity(tableName = "parcels")
+import static com.example.misaka.deliveryservice.Consts.NEW;
+import static com.example.misaka.deliveryservice.Consts.PERSON_TAG;
+
 public class Parcel  implements Comparable<Parcel> {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-
+    private String id;
     private String customerAddress;
     private String customerFullName;
     private String customerEmail;
@@ -32,12 +29,13 @@ public class Parcel  implements Comparable<Parcel> {
     private String status;
     private String coordinates;
     private String comment;
-
+    private String addedBy;
+    private String assignedTo;
 
     public Parcel() {
-        this.customerType = "Person";
-        this.destinationType = "Person";
-        this.status = "Active";
+        this.customerType = PERSON_TAG;
+        this.destinationType = PERSON_TAG;
+        this.status = NEW;
     }
 
     @Override
@@ -46,11 +44,11 @@ public class Parcel  implements Comparable<Parcel> {
                 - Integer.valueOf(p.getDeliveryDate().replaceAll("\\D+",""));
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -212,6 +210,22 @@ public class Parcel  implements Comparable<Parcel> {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getAddedBy() {
+        return addedBy;
+    }
+
+    public void setAddedBy(String addedBy) {
+        this.addedBy = addedBy;
+    }
+
+    public String getAssignedTo() {
+        return assignedTo;
+    }
+
+    public void setAssignedTo(String assignedTo) {
+        this.assignedTo = assignedTo;
     }
 
 }

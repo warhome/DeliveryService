@@ -4,8 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -486,6 +484,20 @@
             android:text="@string/hint_notif"
             android:layout_below="@id/commentEditTextLayout"
             android:layout_alignParentStart="true" />
+        <Button
+            android:id="@+id/buttonChooseCourier"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginTop="18dp"
+            android:visibility="invisible"
+            android:textColor="@color/PrimaryLight"
+            android:background="@drawable/rounded_button"
+            android:text="@string/btn_choose_courier"
+            android:layout_below="@id/commentEditTextLayout"
+            android:layout_toEndOf="@+id/buttonNotification"
+            android:layout_alignParentStart="true" />
 
         <Button
             android:id="@+id/buttonSave"
@@ -500,7 +512,7 @@
             android:background="@drawable/rounded_button"
             android:text="@string/hint_save"
             android:layout_below="@id/buttonNotification"
-            android:enabled="false"/>
+            android:enabled="true"/>
         <Button
             android:id="@+id/buttonChangeStatus"
             android:layout_width="160dp"
@@ -514,5 +526,6 @@
             android:text="@string/hint_set_status"
             android:layout_below="@id/buttonNotification"
             android:layout_alignParentEnd="true" />
+
     </RelativeLayout>
 </ScrollView>

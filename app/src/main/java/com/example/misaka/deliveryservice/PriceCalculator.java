@@ -1,10 +1,7 @@
 package com.example.misaka.deliveryservice;
 
-import android.widget.Toast;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.text.DateFormat;
 import java.util.Date;
 
 public class PriceCalculator {
