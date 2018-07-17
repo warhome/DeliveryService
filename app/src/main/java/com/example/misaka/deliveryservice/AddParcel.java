@@ -12,6 +12,8 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -250,6 +252,44 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
             else
                 priceTextView.setText(DELIMITER);
         });
+
+        TextWatcher parcelSizeTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(editable.toString().equals(ZER0)) parcelSizeEdit.setText(EMPTY_STRING);
+            }
+        };
+
+        parcelSizeEdit.addTextChangedListener(parcelSizeTextWatcher);
+
+        TextWatcher parcelWeighTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(editable.toString().equals(ZER0)) parcelWeighEdit.setText(EMPTY_STRING);
+            }
+        };
+
+        parcelWeighEdit.addTextChangedListener(parcelWeighTextWatcher);
 
         // Берём данные о посылке из intent
         Intent intent = getIntent();
