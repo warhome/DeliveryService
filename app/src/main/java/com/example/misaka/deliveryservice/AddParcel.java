@@ -54,6 +54,7 @@ import static com.example.misaka.deliveryservice.Consts.ID_EXTRA;
 import static com.example.misaka.deliveryservice.Consts.IN_PROCESS;
 import static com.example.misaka.deliveryservice.Consts.IS_ADMIN;
 import static com.example.misaka.deliveryservice.Consts.NEW;
+import static com.example.misaka.deliveryservice.Consts.PARCELS;
 import static com.example.misaka.deliveryservice.Consts.PARCEL_TYPE_TAG_ADMIN;
 import static com.example.misaka.deliveryservice.Consts.PARCEL_TYPE_TAG_COURIER;
 import static com.example.misaka.deliveryservice.Consts.PERSON_TAG;
@@ -81,7 +82,6 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
     private static final String SMSTO = "smsto:";
     private static final String SMS_BODY = "sms_body";
     private static final String MAILTO = "mailto";
-    private static final String PARCELS = "parcels";
     private static final String PHONE_NUMBER_REGEX ="^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$";
     private static final String EMPTY_STRING = "";
     //endregion

@@ -12,6 +12,7 @@ public class Consts {
     static final String PARCEL_TYPE_TAG_COURIER = "TAG_COURIER";
     static final String PARCEL_TYPE_TAG_ADMIN = "TAG_ADMIN";
     static final String COURIERS = "couriers";
+    static final String PARCELS = "parcels";
 
     // Статусы посылок
     public static final String NEW = "Новая";

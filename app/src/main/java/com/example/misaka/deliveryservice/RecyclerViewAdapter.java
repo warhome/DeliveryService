@@ -32,6 +32,7 @@ import static com.example.misaka.deliveryservice.Consts.IN_PROCESS;
 import static com.example.misaka.deliveryservice.Consts.IS_ADMIN;
 import static com.example.misaka.deliveryservice.Consts.IS_RECYCLER_INTENT;
 import static com.example.misaka.deliveryservice.Consts.NEW;
+import static com.example.misaka.deliveryservice.Consts.PARCELS;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ParcelViewHolder> {
 
@@ -102,7 +103,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         if(sharedPreferences.getBoolean(IS_ADMIN,false)) {
             // Delete parcel
             holder.itemView.setOnLongClickListener(view -> {
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("parcels");
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(PARCELS);
                 databaseReference.child(parcels.get(position).getId()).removeValue();
                 return false;
             });
