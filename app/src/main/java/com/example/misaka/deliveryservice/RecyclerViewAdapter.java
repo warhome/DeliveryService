@@ -53,7 +53,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         @BindView(R.id.destinationAddress)
         TextView DestinationAddress;
         @BindView(R.id.showInMapButton)
-        Button   ShowInMapButton;
+        Button ShowInMapButton;
         @BindView(R.id.recyclerStatusValue)
         TextView Status;
 
@@ -87,20 +87,29 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         });
 
         // Show parcel in map
+
+        if (parcels.get(position).getCoordinates() != null && !parcels.get(position).getCoordinates().isEmpty()) {
+
+        }
+
+        // Hide marker if
+        else {
+            holder.ShowInMapButton.setVisibility(View.INVISIBLE);
+        }
+
         holder.ShowInMapButton.setOnClickListener(v -> {
-            if(parcels.get(position).getCoordinates() != null && !parcels.get(position).getCoordinates().isEmpty()) {
+            if (parcels.get(position).getCoordinates() != null && !parcels.get(position).getCoordinates().isEmpty()) {
                 Intent intent = new Intent(v.getContext(), MapActivity.class);
                 intent.putExtra(IS_RECYCLER_INTENT, true);
                 intent.putExtra(COORDINATES, parcels.get(position).getCoordinates());
                 v.getContext().startActivity(intent);
-            }
-            else {
+            } else {
                 Toast.makeText(v.getContext(), R.string.coordinates_not_found_error, Toast.LENGTH_SHORT).show();
             }
         });
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(holder.itemView.getContext());
-        if(sharedPreferences.getBoolean(IS_ADMIN,false)) {
+        if (sharedPreferences.getBoolean(IS_ADMIN, false)) {
             // Delete parcel
             holder.itemView.setOnLongClickListener(view -> {
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(PARCELS);

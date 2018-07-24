@@ -23,7 +23,7 @@ public class StatusDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
-        if(getTag().equals(PARCEL_TYPE_TAG_COURIER))
+        if (getTag().equals(PARCEL_TYPE_TAG_COURIER))
             builder.setItems(R.array.status_types_courier, (dialog, which) -> statusDialogCommunicator.onUpdateStatus(which, getTag()));
         else
             builder.setItems(R.array.status_types_admin, (dialog, which) -> statusDialogCommunicator.onUpdateStatus(which, getTag()));
@@ -33,6 +33,6 @@ public class StatusDialog extends DialogFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.statusDialogCommunicator = (StatusDialogCommunicator)activity;
+        this.statusDialogCommunicator = (StatusDialogCommunicator) activity;
     }
 }

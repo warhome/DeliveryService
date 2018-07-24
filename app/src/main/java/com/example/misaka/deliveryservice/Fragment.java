@@ -57,7 +57,7 @@ public class Fragment extends android.support.v4.app.Fragment {
         parcels = new ArrayList<>();
 
         Bundle bundle = getArguments();
-        if(bundle != null) {
+        if (bundle != null) {
             parcelStatus = bundle.getInt(KEY_BUNDLE);
             filter = bundle.getString(FILTER);
         }
@@ -67,7 +67,7 @@ public class Fragment extends android.support.v4.app.Fragment {
 
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        if(currentUser != null) {
+        if (currentUser != null) {
             DatabaseReference mReference = FirebaseDatabase.getInstance().getReference().child("parcels");
             mReference.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -87,19 +87,18 @@ public class Fragment extends android.support.v4.app.Fragment {
                                     parcels.add(mDataSnapshot.getValue(Parcel.class));
                                 }
                             }
-                        }
-                        else {
+                        } else {
                             parcels.add(mDataSnapshot.getValue(Parcel.class));
                         }
                     }
 
                     // Set adapters (for couriers)
-                    if(filter != null && !mSharedPreferences.getBoolean(IS_ADMIN,false)) {
+                    if (filter != null && !mSharedPreferences.getBoolean(IS_ADMIN, false)) {
                         switch (parcelStatus) {
                             case 0:
                                 Iterator<Parcel> active_iter = parcels.iterator();
                                 while (active_iter.hasNext()) {
-                                    if(active_iter.next().getStatus().equals(COMPLETED) ) {
+                                    if (active_iter.next().getStatus().equals(COMPLETED)) {
                                         active_iter.remove();
                                     }
                                 }
@@ -108,7 +107,7 @@ public class Fragment extends android.support.v4.app.Fragment {
                             case 1:
                                 Iterator<Parcel> completed_iter = parcels.iterator();
                                 while (completed_iter.hasNext()) {
-                                    if(!completed_iter.next().getStatus().equals(COMPLETED)) {
+                                    if (!completed_iter.next().getStatus().equals(COMPLETED)) {
                                         completed_iter.remove();
                                     }
                                 }
@@ -124,11 +123,11 @@ public class Fragment extends android.support.v4.app.Fragment {
                     // Set adapter(for admins)
                     else {
                         Iterator<Parcel> admin_iter = parcels.iterator();
-                            Parcel curr;
-                            while (admin_iter.hasNext()) {
-                                curr = admin_iter.next();
-                                if (!curr.getStatus().equals(NEW) && !curr.getStatus().equals(CANCELED)) {
-                                    admin_iter.remove();
+                        Parcel curr;
+                        while (admin_iter.hasNext()) {
+                            curr = admin_iter.next();
+                            if (!curr.getStatus().equals(NEW) && !curr.getStatus().equals(CANCELED)) {
+                                admin_iter.remove();
                             }
                         }
                         adapter = new RecyclerViewAdapter(parcels);
@@ -138,7 +137,7 @@ public class Fragment extends android.support.v4.app.Fragment {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Toast.makeText(getContext(), databaseError.getCode() + ':' + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+
                 }
             });
         }

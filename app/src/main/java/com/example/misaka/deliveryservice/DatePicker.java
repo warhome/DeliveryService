@@ -25,18 +25,18 @@ public class DatePicker extends DialogFragment implements DatePickerDialog.OnDat
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        return  new DatePickerDialog(Objects.requireNonNull(getActivity()), this, year, month + 1, day);
+        return new DatePickerDialog(Objects.requireNonNull(getActivity()), this, year, month + 1, day);
 
     }
 
     @Override
     public void onDateSet(android.widget.DatePicker datePicker, int year, int month, int day) {
-        datePickerCommunicator.onUpdateDate(String.valueOf(year), String.valueOf(month),String.valueOf(day), getTag());
+        datePickerCommunicator.onUpdateDate(String.valueOf(year), String.valueOf(month), String.valueOf(day), getTag());
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.datePickerCommunicator = (DatePickerCommunicator)activity;
+        this.datePickerCommunicator = (DatePickerCommunicator) activity;
     }
 }

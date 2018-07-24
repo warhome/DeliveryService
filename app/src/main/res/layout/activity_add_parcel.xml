@@ -1,35 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.widget.RelativeLayout
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
-
     tools:context=".AddParcel"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/appbarAddParcel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/appbar_padding_top"
-            android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbarAddParcel"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_weight="1"
-            android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:titleTextColor="@android:color/darker_gray"
-            app:title="@string/app_name">
-
-        </android.support.v7.widget.Toolbar>
-        </android.support.design.widget.AppBarLayout>
         <include
-            android:layout_below="@id/appbarAddParcel"
             layout="@layout/content_add_parcel"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content" />

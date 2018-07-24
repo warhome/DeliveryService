@@ -13,7 +13,7 @@
         <item>Completed</item>
         <item>All</item>
     </string-array>
-    <string name="title_activity_add_parcel">AddParcel</string>
+    <string name="title_activity_add_parcel">Add Parcel</string>
     <string name="Map">Map</string>
     <string name="Enter_comment">Введите комментарий</string>
     <string name="btn_company">Компания</string>
@@ -75,7 +75,10 @@
     <string name="nav_user_status" />
     <string name="ADMIN">Админ</string>
     <string name="COURIER">Курьер</string>
-    <string name="btn_choose_courier">Назначить курьера</string>
+    <string name="btn_choose_courier">Назначить курьера*</string>
     <string name="courier_does_not_choose_error">Необходимо назначить курьера</string>
     <string name="invalid_fields_error">Проверьте правильность заполненных полей</string>
+    <string name="btn_SignOut">Выйти</string>
+    <string name="new_and_canceled">Новые и отменённые</string>
+    <string name="edit_parcel">Edit Parcel</string>
 </resources>

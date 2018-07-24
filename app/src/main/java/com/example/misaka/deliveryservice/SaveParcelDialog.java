@@ -14,6 +14,7 @@ public class SaveParcelDialog extends DialogFragment {
     public interface SaveDialogCommunicator {
         void isSaveParcel(boolean b, String tag);
     }
+
     private SaveDialogCommunicator saveDialogCommunicator;
 
     @NonNull
@@ -29,7 +30,7 @@ public class SaveParcelDialog extends DialogFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.saveDialogCommunicator = (SaveDialogCommunicator)activity;
+        this.saveDialogCommunicator = (SaveDialogCommunicator) activity;
     }
 }
 

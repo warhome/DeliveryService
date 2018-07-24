@@ -41,7 +41,6 @@
             android:name=".AddParcel"
             android:label="@string/title_activity_add_parcel"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".MapActivity"
@@ -50,6 +49,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".firebase.FirebaseAuthActivity"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"/>
 
     </application>

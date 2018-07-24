@@ -54,7 +54,18 @@
 
     <Button
         android:id="@+id/buttonSignIn"
-        android:layout_width="300dp"
+        android:layout_width="140dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/rounded_button"
+        android:textColor="@color/PrimaryLight"
+        android:text="@string/btn_SignIn"
+        android:layout_below="@id/firebase_password_TextInputLayout"/>
+    <Button
+        android:id="@+id/buttonSignOut"
+        android:layout_width="140dp"
         android:layout_height="50dp"
         android:layout_marginStart="18dp"
         android:layout_marginEnd="18dp"
@@ -62,8 +73,17 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/rounded_button"
         android:textColor="@color/PrimaryLight"
-        android:text="@string/btn_SignIn"
+        android:text="@string/btn_SignOut"
         android:layout_below="@id/firebase_password_TextInputLayout"
-        android:visibility="invisible"/>
+        android:layout_alignParentEnd="true"/>
+    <ProgressBar
+        android:id="@+id/firebase_auth_progressBar"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="18dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        />
 
 </RelativeLayout>

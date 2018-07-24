@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+
 import java.util.Objects;
 
 public class TypeDialog extends DialogFragment {
@@ -27,7 +28,7 @@ public class TypeDialog extends DialogFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.typeDialogCommunicator = (TypeDialogCommunicator)activity;
+        this.typeDialogCommunicator = (TypeDialogCommunicator) activity;
     }
 }
 

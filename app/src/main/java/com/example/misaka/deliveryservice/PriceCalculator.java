@@ -14,7 +14,7 @@ public class PriceCalculator {
 
     public double CalculateInKgM(String size, String weight, String days) {
         double price = Double.valueOf(size) * 100 + Double.valueOf(weight) * 100 + Double.valueOf(days) * 10;
-        if (price < MIN_PRICE) return  MIN_PRICE;
+        if (price < MIN_PRICE) return MIN_PRICE;
         else return price;
     }
 

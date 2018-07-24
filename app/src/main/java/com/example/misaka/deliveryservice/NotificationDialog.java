@@ -28,6 +28,6 @@ public class NotificationDialog extends DialogFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.notificationDialogCommunicator = (NotificationDialogCommunicator)activity;
+        this.notificationDialogCommunicator = (NotificationDialogCommunicator) activity;
     }
 }

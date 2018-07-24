@@ -51,10 +51,6 @@ public class MainActivity extends AppCompatActivity {
     TextView emailText;
     TextView statusText;
 
-    // Firebase
-    FirebaseAuth mAuth;
-    FirebaseUser currentUser;
-
     SharedPreferences mSharedPreferences;
 
     @Override
@@ -66,10 +62,11 @@ public class MainActivity extends AppCompatActivity {
         servicesChecker.isServicesOK(getApplicationContext(), this);
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        if(currentUser == null)  startActivityForResult(new Intent(this, FirebaseAuthActivity.class), FIREBASE_AUTH_TAG);
+        if (currentUser == null)
+            startActivityForResult(new Intent(this, FirebaseAuthActivity.class), FIREBASE_AUTH_TAG);
 
         // Toolbar
         setSupportActionBar(toolbar);
@@ -80,14 +77,13 @@ public class MainActivity extends AppCompatActivity {
         }
         View appBar = LayoutInflater.from(this).inflate(R.layout.app_bar, null);
         TextView appBarHead = appBar.findViewById(R.id.app_bar_head_text);
-        appBarHead.setText(R.string.added_by_me);
 
         // Fab
         fab.setOnClickListener(view -> startActivity(new Intent(view.getContext(), AddParcel.class)));
 
         // Tabs
-        if(mSharedPreferences.getBoolean(IS_ADMIN,false)) setViewPager(viewPager);
-        else setupViewPager(viewPager, UPLOADED_BY_ME_BUNDLE);
+        if (mSharedPreferences.getBoolean(IS_ADMIN, false)) setViewPager(viewPager);
+        else setupViewPager(viewPager, ASSIGNED_TO_ME_BUNDLE);
         tabLayout.setupWithViewPager(viewPager);
 
         // Nav
@@ -95,19 +91,19 @@ public class MainActivity extends AppCompatActivity {
         emailText = header.findViewById(R.id.nav_email_text);
         statusText = header.findViewById(R.id.nav_user_status_text);
         updateUI();
-        nav.setNavigationItemSelectedListener(item ->  {
+        nav.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.nav_sign_in:
                     startActivityForResult(new Intent(this, FirebaseAuthActivity.class), FIREBASE_AUTH_TAG);
                     break;
                 case R.id.nav_my_parcels:
-                    if(mSharedPreferences.getBoolean(IS_ADMIN,false)) setViewPager(viewPager);
+                    if (mSharedPreferences.getBoolean(IS_ADMIN, false)) setViewPager(viewPager);
                     else setupViewPager(viewPager, ASSIGNED_TO_ME_BUNDLE);
                     tabLayout.setupWithViewPager(viewPager);
                     appBarHead.setText(R.string.my_parcels);
                     break;
                 case R.id.nav_added_by_me:
-                    if(mSharedPreferences.getBoolean(IS_ADMIN,false)) setViewPager(viewPager);
+                    if (mSharedPreferences.getBoolean(IS_ADMIN, false)) setViewPager(viewPager);
                     else setupViewPager(viewPager, UPLOADED_BY_ME_BUNDLE);
                     tabLayout.setupWithViewPager(viewPager);
                     appBarHead.setText(R.string.added_by_me);
@@ -120,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
     public void setViewPager(ViewPager viewPager) {
         Fragment f = new Fragment();
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(f,"");
+        adapter.addFragment(f, getString(R.string.new_and_canceled));
         viewPager.setAdapter(adapter);
     }
 
@@ -129,9 +125,11 @@ public class MainActivity extends AppCompatActivity {
         String[] statuses_RU = res.getStringArray(R.array.status_name_RU);
         List<Fragment> fragmentList = new ArrayList<>();
 
-        for(int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             Bundle bundle = new Bundle();
-            if(filter != null && !filter.isEmpty()) {bundle.putString(FILTER, filter);}
+            if (filter != null && !filter.isEmpty()) {
+                bundle.putString(FILTER, filter);
+            }
             bundle.putInt(KEY_BUNDLE, i);
             Fragment f = new Fragment();
             f.setArguments(bundle);
@@ -139,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        for(int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             adapter.addFragment(fragmentList.get(i), statuses_RU[i]);
         }
         viewPager.setAdapter(adapter);
@@ -147,7 +145,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == FIREBASE_AUTH_TAG && resultCode == RESULT_OK) { updateUI(); }
+        if (requestCode == FIREBASE_AUTH_TAG && resultCode == RESULT_OK) {
+            updateUI();
+        } else finish();
     }
 
     @Override
@@ -161,21 +161,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateUI() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
-
-        if(currentUser != null) {
+        if (currentUser != null) {
             emailText.setText(currentUser.getEmail());
-            if (mSharedPreferences.getBoolean(IS_ADMIN,false)) {
+            if (mSharedPreferences.getBoolean(IS_ADMIN, false)) {
                 statusText.setText(R.string.ADMIN);
                 fab.setVisibility(View.INVISIBLE);
             } else {
                 statusText.setText(R.string.COURIER);
                 fab.setVisibility(View.VISIBLE);
             }
+            if (mSharedPreferences.getBoolean(IS_ADMIN, false)) setViewPager(viewPager);
+            else setupViewPager(viewPager, ASSIGNED_TO_ME_BUNDLE);
         }
-        if(mSharedPreferences.getBoolean(IS_ADMIN,false)) setViewPager(viewPager);
-        else setupViewPager(viewPager, UPLOADED_BY_ME_BUNDLE);
     }
 }
