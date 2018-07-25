@@ -8,11 +8,14 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -46,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     @BindView(R.id.nav_view)
     NavigationView nav;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
 
     View header;
     TextView emailText;
@@ -70,13 +75,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Toolbar
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-            actionBar.setCustomView(R.layout.app_bar);
+        ActionBar actionbar = getSupportActionBar();
+        if (actionbar != null) {
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
         }
-        View appBar = LayoutInflater.from(this).inflate(R.layout.app_bar, null);
-        TextView appBarHead = appBar.findViewById(R.id.app_bar_head_text);
 
         // Fab
         fab.setOnClickListener(view -> startActivity(new Intent(view.getContext(), AddParcel.class)));
@@ -85,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         if (mSharedPreferences.getBoolean(IS_ADMIN, false)) setViewPager(viewPager);
         else setupViewPager(viewPager, ASSIGNED_TO_ME_BUNDLE);
         tabLayout.setupWithViewPager(viewPager);
+        setTitle(R.string.my_parcels);
 
         // Nav
         header = nav.getHeaderView(0);
@@ -92,21 +96,30 @@ public class MainActivity extends AppCompatActivity {
         statusText = header.findViewById(R.id.nav_user_status_text);
         updateUI();
         nav.setNavigationItemSelectedListener(item -> {
+            mDrawerLayout.closeDrawers();
             switch (item.getItemId()) {
                 case R.id.nav_sign_in:
                     startActivityForResult(new Intent(this, FirebaseAuthActivity.class), FIREBASE_AUTH_TAG);
                     break;
                 case R.id.nav_my_parcels:
                     if (mSharedPreferences.getBoolean(IS_ADMIN, false)) setViewPager(viewPager);
-                    else setupViewPager(viewPager, ASSIGNED_TO_ME_BUNDLE);
+                    else {
+                        setupViewPager(viewPager, ASSIGNED_TO_ME_BUNDLE);
+                        setTitle(R.string.my_parcels);
+                    }
                     tabLayout.setupWithViewPager(viewPager);
-                    appBarHead.setText(R.string.my_parcels);
                     break;
                 case R.id.nav_added_by_me:
                     if (mSharedPreferences.getBoolean(IS_ADMIN, false)) setViewPager(viewPager);
-                    else setupViewPager(viewPager, UPLOADED_BY_ME_BUNDLE);
+                    else {
+                        setupViewPager(viewPager, UPLOADED_BY_ME_BUNDLE);
+                        setTitle(R.string.added_by_me);
+                    }
                     tabLayout.setupWithViewPager(viewPager);
-                    appBarHead.setText(R.string.added_by_me);
+                    break;
+                case R.id.nav_sign_out:
+                    mAuth.signOut();
+                    startActivityForResult(new Intent(this, FirebaseAuthActivity.class), FIREBASE_AUTH_TAG);
                     break;
             }
             return true;
@@ -176,5 +189,15 @@ public class MainActivity extends AppCompatActivity {
             if (mSharedPreferences.getBoolean(IS_ADMIN, false)) setViewPager(viewPager);
             else setupViewPager(viewPager, ASSIGNED_TO_ME_BUNDLE);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

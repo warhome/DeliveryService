@@ -44,8 +44,6 @@ public class FirebaseAuthActivity extends AppCompatActivity {
     TextInputLayout firebasePasswordTextInput;
     @BindView(R.id.buttonSignIn)
     Button btn_SignIn;
-    @BindView(R.id.buttonSignOut)
-    Button btn_SignOut;
     @BindView(R.id.firebase_auth_progressBar)
     ProgressBar authProgressBar;
 
@@ -87,17 +85,6 @@ public class FirebaseAuthActivity extends AppCompatActivity {
                                 authProgressBar.setVisibility(View.INVISIBLE);
                             }
                         });
-            }
-        });
-
-        // Log out
-        btn_SignOut.setOnClickListener(view -> {
-            mAuth.signOut();
-            setResult(RESULT_CANCELED);
-
-            if (actionBar != null) {
-                actionBar.setHomeButtonEnabled(false);
-                actionBar.setDisplayHomeAsUpEnabled(false);
             }
         });
     }

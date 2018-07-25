@@ -471,7 +471,6 @@
                 android:textSize="16sp" />
         </android.support.design.widget.TextInputLayout>
 
-
         <Button
             android:id="@+id/buttonNotification"
             android:layout_width="140dp"

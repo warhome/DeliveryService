@@ -167,12 +167,10 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
     TextInputLayout deliveryDateEditLayout;
     @BindView(R.id.commentEditTextLayout)
     TextInputLayout commentEditTextLayout;
-
     @BindView(R.id.courierChooseEditText)
     EditText chooseCourierEditText;
     @BindView(R.id.courierChooseEditTextLayout)
     TextInputLayout chooseCourierEditTextLayout;
-
     @BindView(R.id.latTextValue)
     TextView latTextValue;
     @BindView(R.id.lngTextValue)
