@@ -32,6 +32,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
+import java.util.WeakHashMap;
 import java.util.regex.Pattern;
 
 import butterknife.BindFont;
@@ -51,11 +52,15 @@ import static com.example.misaka.deliveryservice.Consts.DELIMITER;
 import static com.example.misaka.deliveryservice.Consts.ID_EXTRA;
 import static com.example.misaka.deliveryservice.Consts.IN_PROCESS;
 import static com.example.misaka.deliveryservice.Consts.IS_ADMIN;
+import static com.example.misaka.deliveryservice.Consts.KILOGRAM;
+import static com.example.misaka.deliveryservice.Consts.METER;
 import static com.example.misaka.deliveryservice.Consts.NEW;
 import static com.example.misaka.deliveryservice.Consts.PARCELS;
 import static com.example.misaka.deliveryservice.Consts.PARCEL_TYPE_TAG_ADMIN;
 import static com.example.misaka.deliveryservice.Consts.PARCEL_TYPE_TAG_COURIER;
 import static com.example.misaka.deliveryservice.Consts.PERSON_TAG;
+import static com.example.misaka.deliveryservice.Consts.SIZE;
+import static com.example.misaka.deliveryservice.Consts.WEIGH;
 
 public class AddParcel extends AppCompatActivity implements View.OnClickListener,
         TypeDialog.TypeDialogCommunicator,
@@ -181,6 +186,7 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
     PriceCalculator priceCalculator;
     boolean isNewParcel = true;
     boolean isAdmin;
+    SharedPreferences mSharedPref;
 
     //Firebase
     FirebaseAuth mAuth;
@@ -197,7 +203,7 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
 
-        SharedPreferences mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         isAdmin = mSharedPref.getBoolean(IS_ADMIN, false);
 
         parcel = new Parcel();
@@ -394,7 +400,12 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
 
     public void onUpdatePrice(String size, String weigh, String deliveryDate) {
         String days = priceCalculator.CalculateDeliveryDays(getDate(0), deliveryDate);
-        priceTextView.setText(String.valueOf(priceCalculator.CalculateInKgM(size, weigh, days)));
+        priceTextView.setText(String.valueOf(priceCalculator.CalculatePrice(
+                size,
+                weigh,
+                days,
+                mSharedPref.getString(SIZE, METER),
+                mSharedPref.getString(WEIGH, KILOGRAM))));
     }
 
     @Override
@@ -497,8 +508,12 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
         destinationCompanyNameEdit.setText(parcel.getDestinationCompanyName());
 
         parcelNameEdit.setText(parcel.getParcelName());
-        parcelSizeEdit.setText(parcel.getParcelSize());
-        parcelWeighEdit.setText(parcel.getParcelWeigh());
+        parcelSizeEdit.setText(String.valueOf(priceCalculator.SizeFromMeters(parcel.getParcelSize(), mSharedPref.getString(SIZE,METER))));
+        parcelWeighEdit.setText(String.valueOf(priceCalculator.WeighFromKilograms(parcel.getParcelWeigh(), mSharedPref.getString(WEIGH, KILOGRAM))));
+        parcelSizeEditLayout.setHelperText(mSharedPref.getString(SIZE, METER));
+        parcelSizeEditLayout.setHelperTextEnabled(true);
+        parcelWeighEditLayout.setHelperText(mSharedPref.getString(WEIGH, METER));
+        parcelWeighEditLayout.setHelperTextEnabled(true);
         deliveryDateEdit.setText(parcel.getDeliveryDate());
         priceTextView.setText(parcel.getPrice());
 
@@ -547,8 +562,10 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
         parcel.setDestinationPhoneNumber(destinationPhoneNumberEdit.getText().toString());
         parcel.setDestinationCompanyName(destinationCompanyNameEdit.getText().toString());
         parcel.setParcelName(parcelNameEdit.getText().toString());
-        parcel.setParcelSize(parcelSizeEdit.getText().toString());
-        parcel.setParcelWeigh(parcelWeighEdit.getText().toString());
+        parcel.setParcelSize(String.valueOf(priceCalculator.SizeToMeters(parcelSizeEdit.getText().toString(),
+                    mSharedPref.getString(SIZE, METER))));
+        parcel.setParcelWeigh(String.valueOf(priceCalculator.WeighToKilograms(parcelWeighEdit.getText().toString(),
+                mSharedPref.getString(WEIGH, KILOGRAM))));
         parcel.setPrice(priceTextView.getText().toString());
         parcel.setDeliveryDate(deliveryDateEdit.getText().toString());
     }

@@ -66,7 +66,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         getLocationPermission();
 
-        // TODO: Починить вылет
         btn = findViewById(R.id.mapBtn);
         btn.setOnClickListener(v -> {
             Intent intent = new Intent();

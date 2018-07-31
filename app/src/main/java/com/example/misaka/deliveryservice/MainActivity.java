@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -13,10 +14,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import com.example.misaka.deliveryservice.firebase.FirebaseAuthActivity;
@@ -98,9 +101,7 @@ public class MainActivity extends AppCompatActivity {
         nav.setNavigationItemSelectedListener(item -> {
             mDrawerLayout.closeDrawers();
             switch (item.getItemId()) {
-                case R.id.nav_sign_in:
-                    startActivityForResult(new Intent(this, FirebaseAuthActivity.class), FIREBASE_AUTH_TAG);
-                    break;
+
                 case R.id.nav_my_parcels:
                     if (mSharedPreferences.getBoolean(IS_ADMIN, false)) setViewPager(viewPager);
                     else {
@@ -109,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     tabLayout.setupWithViewPager(viewPager);
                     break;
+
                 case R.id.nav_added_by_me:
                     if (mSharedPreferences.getBoolean(IS_ADMIN, false)) setViewPager(viewPager);
                     else {
@@ -117,6 +119,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                     tabLayout.setupWithViewPager(viewPager);
                     break;
+
+                case R.id.nav_settings:
+                    startActivity(new Intent(this, SettingsActivity.class));
+                    break;
+
                 case R.id.nav_sign_out:
                     mAuth.signOut();
                     startActivityForResult(new Intent(this, FirebaseAuthActivity.class), FIREBASE_AUTH_TAG);

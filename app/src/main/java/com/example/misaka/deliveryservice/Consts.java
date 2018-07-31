@@ -26,4 +26,15 @@ public class Consts {
     static final String IS_RECYCLER_INTENT = "isRecyclerIntent";
     static final String ID_EXTRA = "id";
     public static final String IS_ADMIN = "is_admin";
+
+    static final String CENTIMETER = "cm";
+    static final String MILIMETER = "mm";
+    static final String METER = "m";
+    static final String FOOT = "ft";
+    static final String SIZE = "size";
+
+    static final String KILOGRAM = "km";
+    static final String GRAM = "g";
+    static final String LB = "lb";
+    static final String WEIGH = "weigh";
 }
