@@ -32,7 +32,6 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
-import java.util.WeakHashMap;
 import java.util.regex.Pattern;
 
 import butterknife.BindFont;
@@ -78,14 +77,13 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
     private static final String SAVE_PARCEL_TAG = "SAVE_PARCEL";
     private static final String NOTIFICATION_TAG = "NOTIFICATION";
     private static final String CHOOSE_COURIER_TAG = "CHOOSE_COURIER";
-    private static final String ZER0 = "0";
     private static final String SMS = "SMS";
     private static final String EMAIL = "Email";
     private static final String SMSTO = "smsto:";
     private static final String SMS_BODY = "sms_body";
     private static final String MAILTO = "mailto";
     private static final String PHONE_NUMBER_REGEX = "^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$";
-    private static final String ZEROS_REGEX = "^0+$";
+    private static final String ZEROS_REGEX = "^0*\\.?0*$";
     private static final String EMPTY_STRING = "";
     //endregion
 
@@ -217,6 +215,7 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
         sendNotification.setOnClickListener(this);
         chooseCourierEditText.setOnClickListener(this);
 
+
         // DatePicker
         deliveryDateEdit.setOnClickListener(v -> {
             DatePicker datePicker = new DatePicker();
@@ -267,6 +266,7 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
             setDefaultDeliveryDate();
             onCheckInstanceState(savedInstanceState);
         }
+        setHelperTexts();
     }
 
     @Override
@@ -508,12 +508,8 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
         destinationCompanyNameEdit.setText(parcel.getDestinationCompanyName());
 
         parcelNameEdit.setText(parcel.getParcelName());
-        parcelSizeEdit.setText(String.valueOf(priceCalculator.SizeFromMeters(parcel.getParcelSize(), mSharedPref.getString(SIZE,METER))));
-        parcelWeighEdit.setText(String.valueOf(priceCalculator.WeighFromKilograms(parcel.getParcelWeigh(), mSharedPref.getString(WEIGH, KILOGRAM))));
-        parcelSizeEditLayout.setHelperText(mSharedPref.getString(SIZE, METER));
-        parcelSizeEditLayout.setHelperTextEnabled(true);
-        parcelWeighEditLayout.setHelperText(mSharedPref.getString(WEIGH, METER));
-        parcelWeighEditLayout.setHelperTextEnabled(true);
+        parcelSizeEdit.setText(priceCalculator.SizeFromMeters(parcel.getParcelSize(), mSharedPref.getString(SIZE,METER)));
+        parcelWeighEdit.setText(priceCalculator.WeighFromKilograms(parcel.getParcelWeigh(), mSharedPref.getString(WEIGH, KILOGRAM)));
         deliveryDateEdit.setText(parcel.getDeliveryDate());
         priceTextView.setText(parcel.getPrice());
 
@@ -562,10 +558,10 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
         parcel.setDestinationPhoneNumber(destinationPhoneNumberEdit.getText().toString());
         parcel.setDestinationCompanyName(destinationCompanyNameEdit.getText().toString());
         parcel.setParcelName(parcelNameEdit.getText().toString());
-        parcel.setParcelSize(String.valueOf(priceCalculator.SizeToMeters(parcelSizeEdit.getText().toString(),
-                    mSharedPref.getString(SIZE, METER))));
-        parcel.setParcelWeigh(String.valueOf(priceCalculator.WeighToKilograms(parcelWeighEdit.getText().toString(),
-                mSharedPref.getString(WEIGH, KILOGRAM))));
+        parcel.setParcelSize(priceCalculator.SizeToMeters(parcelSizeEdit.getText().toString(),
+                    mSharedPref.getString(SIZE, METER)));
+        parcel.setParcelWeigh(priceCalculator.WeighToKilograms(parcelWeighEdit.getText().toString(),
+                mSharedPref.getString(WEIGH, KILOGRAM)));
         parcel.setPrice(priceTextView.getText().toString());
         parcel.setDeliveryDate(deliveryDateEdit.getText().toString());
     }
@@ -737,7 +733,7 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (Pattern.compile(ZEROS_REGEX).matcher(editable.toString()).matches())
+                if (!editable.toString().isEmpty() && Pattern.compile(ZEROS_REGEX).matcher(editable.toString()).matches())
                     editText.setText(EMPTY_STRING);
             }
         };
@@ -747,5 +743,12 @@ public class AddParcel extends AppCompatActivity implements View.OnClickListener
     // TODO: Реализовать scroll к первому не прошедшему валидацию полю
     public void onScroll() {
 
+    }
+
+    public void setHelperTexts() {
+        parcelSizeEditLayout.setHelperText(mSharedPref.getString(SIZE, METER));
+        parcelSizeEditLayout.setHelperTextEnabled(true);
+        parcelWeighEditLayout.setHelperText(mSharedPref.getString(WEIGH, METER));
+        parcelWeighEditLayout.setHelperTextEnabled(true);
     }
 }

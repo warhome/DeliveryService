@@ -169,4 +169,5 @@
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="weigh_settings">Вес</string>
     <string name="size_settings">Размер</string>
+    <string name="text_units">Единицы измерения</string>
 </resources>
